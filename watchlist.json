@@ -1,0 +1,83 @@
+{
+    "page": 1,
+    "results": [
+        {
+            "adult": false,
+            "backdrop_path": "/jrudoaXcoLyHRPdolyOGemXgPEs.jpg",
+            "genre_ids": [
+                36,
+                18
+            ],
+            "id": 369972,
+            "original_language": "en",
+            "original_title": "First Man",
+            "overview": "A look at the life of the astronaut, Neil Armstrong, and the legendary space mission that led him to become the first man to walk on the Moon on July 20, 1969.",
+            "popularity": 16.902,
+            "poster_path": "/i91mfvFcPPlaegcbOyjGgiWfZzh.jpg",
+            "release_date": "2018-10-10",
+            "title": "First Man",
+            "video": false,
+            "vote_average": 7.043,
+            "vote_count": 4693
+        },
+        {
+            "adult": false,
+            "backdrop_path": "/dVr11o9or7AS8AMPfwjSpEU83iU.jpg",
+            "genre_ids": [
+                18,
+                10752
+            ],
+            "id": 423,
+            "original_language": "en",
+            "original_title": "The Pianist",
+            "overview": "The true story of pianist Władysław Szpilman's experiences in Warsaw during the Nazi occupation. When the Jews of the city find themselves forced into a ghetto, Szpilman finds work playing in a café; and when his family is deported in 1942, he stays behind, works for a while as a laborer, and eventually goes into hiding in the ruins of the war-torn city.",
+            "popularity": 32.329,
+            "poster_path": "/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg",
+            "release_date": "2002-09-17",
+            "title": "The Pianist",
+            "video": false,
+            "vote_average": 8.381,
+            "vote_count": 7862
+        },
+        {
+            "adult": false,
+            "backdrop_path": "/l6hQWH9eDksNJNiXWYRkWqikOdu.jpg",
+            "genre_ids": [
+                14,
+                18,
+                80
+            ],
+            "id": 497,
+            "original_language": "en",
+            "original_title": "The Green Mile",
+            "overview": "A supernatural tale set on death row in a Southern prison, where gentle giant John Coffey possesses the mysterious power to heal people's ailments. When the cell block's head guard, Paul Edgecomb, recognizes Coffey's miraculous gift, he tries desperately to help stave off the condemned man's execution.",
+            "popularity": 86.948,
+            "poster_path": "/velWPhVMQeQKcxggNEU8YmIo52R.jpg",
+            "release_date": "1999-12-10",
+            "title": "The Green Mile",
+            "video": false,
+            "vote_average": 8.508,
+            "vote_count": 15054
+        },
+        {
+            "adult": false,
+            "backdrop_path": "/iGCHoFp4VUwMoolO2C2u12AgiKl.jpg",
+            "genre_ids": [
+                18
+            ],
+            "id": 515916,
+            "original_language": "nl",
+            "original_title": "Girl",
+            "overview": "A promising teenage dancer enrolls at a prestigious ballet school while grappling with her gender dysphoria.",
+            "popularity": 11.072,
+            "poster_path": "/a6WKjZ1eHrKV8u1DYqjW4yUPuC.jpg",
+            "release_date": "2018-09-18",
+            "title": "Girl",
+            "video": false,
+            "vote_average": 7.209,
+            "vote_count": 629
+        }
+    ],
+    "total_pages": 1,
+    "total_results": 4
+}
