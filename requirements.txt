@@ -1,4 +1,5 @@
 apscheduler
+python-dotenv
 jsonpath_ng
 redis
 requests

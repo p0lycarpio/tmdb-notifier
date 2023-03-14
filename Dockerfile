@@ -7,4 +7,4 @@ COPY . /app/
 RUN chmod +x ./install-redis.sh && sh ./install-redis.sh
 
 ENTRYPOINT ["python3"] 
-CMD ["main.py"]
+CMD ["src/main.py"]

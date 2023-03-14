@@ -1,3 +1,4 @@
+from typing import Any, List
 from json import dumps, loads
 
 def find_difference(lst1: list, lst2: list) -> list:
@@ -11,3 +12,12 @@ def find_difference(lst1: list, lst2: list) -> list:
 def dics_to_set(lst: list[dict]) -> set:
     '''Convert list of dicts to set'''
     return set(dumps(x, sort_keys=True) for x in lst)  # sort_keys to control order of keys
+
+
+def readable_list(seq: List[Any]) -> str:
+    """Return a grammatically correct human readable string (with an Oxford comma)."""
+    # Ref: https://stackoverflow.com/a/53981846/
+    seq = [str(s) for s in seq]
+    if len(seq) < 3:
+        return ' et '.join(seq)
+    return ', '.join(seq[:-1]) + ', et ' + seq[-1]

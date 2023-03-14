@@ -637,6 +637,20 @@
         },
         "FR": {
             "link": "https://www.themoviedb.org/movie/515916-girl/watch?locale=FR",
+            "flatrate": [
+                {
+                    "logo_path": "/gqdajHmtr6qtutL7kkmEgleGfV9.jpg",
+                    "provider_id": 63,
+                    "provider_name": "Disney+",
+                    "display_priority": 7
+                },
+                {
+                    "logo_path": "/gqdajHmtr6qtutL7kkmEgleGfV9.jpg",
+                    "provider_id": 63,
+                    "provider_name": "MUBI",
+                    "display_priority": 7
+                }
+            ],
             "rent": [
                 {
                     "logo_path": "/peURlLlr8jggOwK53fJ5wdQl05y.jpg",
