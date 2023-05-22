@@ -8,3 +8,8 @@ echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://pack
 
 apt-get -y update
 apt-get -y install redis
+
+service redis-server stop
+echo "unixsocket /run/redis.sock
+unixsocketperm 775" >> /etc/redis/redis.conf
+service redis-server start

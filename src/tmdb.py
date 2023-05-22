@@ -4,16 +4,17 @@ from jsonpath_ng import jsonpath, parse
 
 import config as _
 
+base_url = "https://api.themoviedb.org"
+
 def Watchlist() -> list:
-    # url  = f"{base_url}/4/account/{_.tmdb_userid}/movie/watchlist"
-    # url += f"?api_key={_.tmdb_api_key}"
-    # auth = f"Bearer {_.tmdb_token}"
-    # headers = {'Authorization': auth}
+    url  = f"{base_url}/4/account/{_.tmdb_userid}/movie/watchlist"
+    url += f"?api_key={_.tmdb_api_key}"
+    auth = f"Bearer {_.tmdb_token}"
+    headers = {'Authorization': auth}
     
-    # response = requests.request("GET", url, headers=headers)
-    # if response.status_code != 200: return
-    f =open("watchlist.json")
-    response = json.load(f)
+    response = requests.request("GET", url, headers=headers)
+    if response.status_code != 200: return
+    response = response.json()
     
     print("Watchlist retrieved")
     watchlist = []
@@ -23,13 +24,13 @@ def Watchlist() -> list:
 
 
 def Providers(movie_id) -> list:
-    # url = f"{base_url}/3/movie/{movie_id}/watch/providers"
-    # url += f"?api_key={_.tmdb_api_key}"  
+    url = f"{base_url}/3/movie/{movie_id}/watch/providers"
+    url += f"?api_key={_.tmdb_api_key}"  
     
-    # response = requests.request("GET", url)
-    # if response.status_code != 200: return
-    f = open("providers.json")
-    response = json.load(f)
+    response = requests.request("GET", url)
+    if response.status_code != 200: return
+    response = response.json()
+
     providers, selector, names = [], [], []
     expression = parse("$.results.FR.flatrate")
     for match in expression.find(response):
@@ -42,11 +43,9 @@ def Providers(movie_id) -> list:
     return providers
 
 def Movie(movie_id):
-    """ url = f"{base_url}/3/movie/{movie_id}?language=fr-FR"
+    url = f"{base_url}/3/movie/{movie_id}?language=fr-FR"
     url += f"?api_key={_.tmdb_api_key}"  
     
     response = requests.request("GET", url)
     if response.status_code != 200: return
-    return response.content """
-    f = open("movie.json")
-    return json.load(f)
+    return response.content.json()
