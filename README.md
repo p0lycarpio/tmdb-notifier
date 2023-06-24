@@ -16,8 +16,9 @@ docker run -d \
 
 ## Environment variables
 
-- **DISCORD_WEBHOOK**: (str) - URL of Discord webhook channel to send notification
-- **CRON**: (str) - crontab trigger rules
+- **WEBHOOK_URL**: (str) - URL of Discord webhook channel to send notification
+- *CRON*: (str) - crontab trigger rules. Default : "0 20 * * *"
 - **TMDB_API_KEY**: TMDB v3 API key
 - **TMDB_TOKEN**: TMDB v4 bearer token
 - **TMDB_USERID**: username of the watchlist to monitor
+- *TZ* : timezone

@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 import redis
 
 
@@ -7,7 +8,8 @@ def init():
     global tmdb_api_key, tmdb_token, tmdb_userid, webhook_url, redis_port, db
     load_dotenv()
 
-    print("\n=== TMDB Notifier starts ===\n")
+    print(f"\n{datetime.now()}")
+    print("=== TMDB Notifier starts ===\n")
 
     tmdb_api_key = os.getenv("TMDB_API_KEY")
     tmdb_token = os.getenv("TMDB_TOKEN")

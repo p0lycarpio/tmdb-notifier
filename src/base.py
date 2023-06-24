@@ -44,7 +44,8 @@ def main():
             webhook.sendWebhook(message, movie_id)
         else:
             print(f"{idx}/{nb} No providers updates for {movie_id}")
-        time.sleep(.1)
+        time.sleep(.4)
 
 if __name__ == "__main__":
     main()
+    exit()
