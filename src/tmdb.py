@@ -5,17 +5,19 @@ from jsonpath_ng import jsonpath, parse
 import config as _
 
 base_url = "https://api.themoviedb.org"
-queryparams = {
-    "api_key": _.tmdb_api_key,
-    "language": "fr-FR"
-}
+
+def getQueryParams() -> dict:
+    return {
+        "api_key": _.tmdb_api_key,
+        "language": "fr-FR"
+    }
 
 def Watchlist() -> list:
     url  = f"{base_url}/4/account/{_.tmdb_userid}/movie/watchlist"
     auth = f"Bearer {_.tmdb_token}"
     headers = {'Authorization': auth}
     
-    response = requests.request("GET", url, headers=headers, params=queryparams)
+    response = requests.request("GET", url, headers=headers, params=getQueryParams())
     if response.status_code != 200: return
     response = response.json()
     
@@ -29,7 +31,7 @@ def Watchlist() -> list:
 def Providers(movie_id) -> list:
     url = f"{base_url}/3/movie/{movie_id}/watch/providers"
     
-    response = requests.request("GET", url, params=queryparams)
+    response = requests.request("GET", url, params=getQueryParams())
     if response.status_code != 200: return
     response = response.json()
 
@@ -47,6 +49,6 @@ def Providers(movie_id) -> list:
 def Movie(movie_id) -> dict:
     url = f"{base_url}/3/movie/{movie_id}"
     
-    response = requests.request("GET", url, params=queryparams)
+    response = requests.request("GET", url, params=getQueryParams())
     if response.status_code != 200: return
     return response.json()
