@@ -1,17 +1,16 @@
+import os
 from typing import Any, List
-from json import dumps, loads
 
-def find_difference(lst1: list, lst2: list) -> list:
-    '''Returns elements in lst1 which are not in lst2'''
-    set1 = dics_to_set(lst1)
-    set2 = dics_to_set(lst2)
 
-    # Deserialize elements in set1 that are not in set2
-    return [loads(x) for x in set1.difference(set2)]  # items in set1 that are not in set2
+def find_difference(set1: set, set2: set) -> set:
+    """Returns elements in set1 which are not in set2"""
+    return set1.difference(set2)
 
-def dics_to_set(lst: list[dict]) -> set:
-    '''Convert list of dicts to set'''
-    return set(dumps(x, sort_keys=True) for x in lst)  # sort_keys to control order of keys
+
+def cross_difference_number(set1: set, set2: set) -> int:
+    s1 = set1.difference(set2)
+    s2 = set2.difference(set1)
+    return len(s1) + len(s2)
 
 
 def readable_list(seq: List[Any]) -> str:
@@ -19,5 +18,17 @@ def readable_list(seq: List[Any]) -> str:
     # Ref: https://stackoverflow.com/a/53981846/
     seq = [str(s) for s in seq]
     if len(seq) < 3:
-        return ' et '.join(seq)
-    return ', '.join(seq[:-1]) + ', et ' + seq[-1]
+        return " et ".join(seq)
+    return ", ".join(seq[:-1]) + ", et " + seq[-1]
+
+
+def check_env_vars(variables_names: list):
+    error = False
+    for var_name in variables_names:
+        var_value = os.getenv(var_name)
+        if var_value is None:
+            print(f"[ERROR] La variable d'environnement {var_name} n'est pas définie.")
+            error = True
+
+    if error:
+        exit(1)

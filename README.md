@@ -14,6 +14,14 @@ docker run -d \
     --name tmdb-notifier tmdb-notifier
 ```
 
+### Testing with JSON
+
+```bash
+docker run --rm \
+    --env-file .env \
+    --name tmdb-notifier -v $(pwd)/json/:/json/ tmdb-notifier
+```
+
 ## Environment variables
 
 - **WEBHOOK_URL**: (str) - URL of Discord webhook channel to send notification
@@ -22,3 +30,4 @@ docker run -d \
 - **TMDB_TOKEN**: TMDB v4 bearer token
 - **TMDB_USERID**: username of the watchlist to monitor
 - *TZ* : timezone
+- *LANGUAGE*: (str)

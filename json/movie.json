@@ -1,0 +1,81 @@
+{
+    "adult": false,
+    "backdrop_path": "/kd9jFTTabg4xJpHDgxY0h8F9BzG.jpg",
+    "belongs_to_collection": null,
+    "budget": 25000000,
+    "genres": [
+        {
+            "id": 80,
+            "name": "Crime"
+        },
+        {
+            "id": 18,
+            "name": "Drame"
+        },
+        {
+            "id": 53,
+            "name": "Thriller"
+        }
+    ],
+    "homepage": "",
+    "id": 6977,
+    "imdb_id": "tt0477348",
+    "original_language": "en",
+    "original_title": "No Country for Old Men",
+    "overview": "À la frontière qui sépare le Texas du Mexique, les trafiquants de drogue ont depuis longtemps remplacé les voleurs de bétail. Lorsque Llewelyn Moss tombe sur une camionnette abandonnée, cernée de cadavres ensanglantés, il ne sait rien de ce qui a conduit à ce drame. Et quand il prend les deux millions de dollars qu’il découvre à l’intérieur du véhicule, il n’a pas la moindre idée de ce que cela va provoquer… Moss a déclenché une réaction en chaîne d’une violence inouïe que le shérif Bell, un homme vieillissant et sans illusions, ne parviendra pas à contenir…",
+    "popularity": 58.296,
+    "poster_path": "/hxVT4KTmjVxVbsnvImm6WWgLMzg.jpg",
+    "production_companies": [
+        {
+            "id": 14,
+            "logo_path": "/m6AHu84oZQxvq7n1rsvMNJIAsMu.png",
+            "name": "Miramax",
+            "origin_country": "US"
+        },
+        {
+            "id": 258,
+            "logo_path": null,
+            "name": "Scott Rudin Productions",
+            "origin_country": "US"
+        },
+        {
+            "id": 2092,
+            "logo_path": null,
+            "name": "Mike Zoss Productions",
+            "origin_country": "US"
+        },
+        {
+            "id": 838,
+            "logo_path": "/tcW3UqV46Mdq6GyaS1ydEDocEDF.png",
+            "name": "Paramount Vantage",
+            "origin_country": "US"
+        }
+    ],
+    "production_countries": [
+        {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        }
+    ],
+    "release_date": "2007-06-13",
+    "revenue": 171627166,
+    "runtime": 122,
+    "spoken_languages": [
+        {
+            "english_name": "English",
+            "iso_639_1": "en",
+            "name": "English"
+        },
+        {
+            "english_name": "Spanish",
+            "iso_639_1": "es",
+            "name": "Español"
+        }
+    ],
+    "status": "Released",
+    "tagline": "Aucune chance d'en sortir indemne.",
+    "title": "No Country for Old Men",
+    "video": false,
+    "vote_average": 7.932,
+    "vote_count": 10873
+}

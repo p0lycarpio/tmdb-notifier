@@ -6,9 +6,9 @@ DEFAULT_CRON="0 20 * * *"
 sed -i '$d' /etc/crontabs/root
 
 if [[ -z ${CRON} ]]; then
-    echo "${DEFAULT_CRON} /usr/local/bin/python3 /app/base.py" >> /etc/crontabs/root
+    echo "${DEFAULT_CRON} /usr/local/bin/python3 /app/main.py" >> /etc/crontabs/root
 else
-    echo "${CRON} /usr/local/bin/python3 /app/base.py" >> /etc/crontabs/root
+    echo "${CRON} /usr/local/bin/python3 /app/main.py" >> /etc/crontabs/root
 fi
 
 exec /usr/sbin/crond -f -S -l 5
