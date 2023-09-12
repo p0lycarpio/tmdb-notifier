@@ -76,7 +76,7 @@ class TheMovieDatabase:
         response = response.json()
 
         return Movie(
-            id=response["title"],
+            id=response["id"],
             title=response["title"],
             year=response["release_date"][0:4],
             overview=response["overview"],

@@ -45,8 +45,6 @@ if __name__ == "__main__":
             notification.send_webhook(
                 json_data=message, title=f"{movie.title} ({movie.year})"
             )
-        # prevent spamming
-        time.sleep(0.3)
 
     print(
         f"{nb} movies processed. {watchlist_diff} watchlist changes, {changes} movies with new providers and {nb-changes} non-updated.\n"
