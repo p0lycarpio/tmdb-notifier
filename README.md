@@ -42,6 +42,7 @@ docker run -d \
 - **TMDB_USERID**: TMDB username of the watchlist to monitor
 - *TZ* : timezone. Default : `UTC`
 - *LANGUAGE*: availability of films in your country. Default to `fr-FR`
+- *LOG_LEVEL* stdout verbosity. Default to `INFO`
 
 ## Contributing
 
