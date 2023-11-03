@@ -1,4 +1,5 @@
 import os
+import logging
 from typing import Any, List
 
 
@@ -27,7 +28,7 @@ def check_env_vars(variables_names: list):
     for var_name in variables_names:
         var_value = os.getenv(var_name)
         if var_value is None:
-            print(f"[ERROR] La variable d'environnement {var_name} n'est pas définie.")
+            logging.critical(f"[ERROR] La variable d'environnement {var_name} n'est pas définie.")
             error = True
 
     if error:

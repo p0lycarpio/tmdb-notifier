@@ -1,7 +1,7 @@
 from datetime import timedelta
 
+import logging
 import redis
-
 import utils
 
 
@@ -14,6 +14,7 @@ class Database:
             decode_responses=True,
         )
         self.ttl = default_ttl
+        self.__logger = logging.getLogger("app:Database")
 
     def compare_and_update(
         self, object_name: str, requested_obj: set[str]
@@ -31,9 +32,11 @@ class Database:
 
         if stored_obj == set() and requested_obj != set():
             self.db.sadd(object_name, *requested_obj)
-            # print(f"DB: {object_name} entry updated")
+            self.__logger.debug(f"Set {object_name} not found in database, entry added")
         elif diff != set():
+            self.__logger.debug(f"Set {object_name} updated in database")
             self.db.sadd(object_name, *diff)
 
         changes_nb = utils.cross_difference_number(stored_obj, requested_obj)
+        self.__logger.debug(f"Set {object_name} has {changes_nb} changes : {diff}")
         return (diff, changes_nb)

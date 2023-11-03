@@ -1,11 +1,13 @@
 import requests
+import logging
 
-from Tmdb import Movie
+from TheMovieDatabase import Movie
 
 
 class Notifier:
     def __init__(self, webhook_url) -> None:
         self.webhook_url = webhook_url
+        self.__logger = logging.getLogger("app:Notifier")
 
     def create_discord_message(self, movie: Movie, services: str) -> dict:
         message = f"**{movie.title}** ({movie.year}) est disponible sur {services} !"
@@ -23,6 +25,7 @@ class Notifier:
             "avatar_url": "https://pbs.twimg.com/profile_images/1243623122089041920/gVZIvphd_400x400.jpg",
             "embeds": [embed],
         }
+        self.__logger.debug(f"Discord message body : {body}")
         return body
 
     def send_webhook(self, json_data, title):
@@ -32,8 +35,8 @@ class Notifier:
             headers={"Content-Type": "application/json"},
         )
         if 200 <= result.status_code < 300:
-            print(f"Webhook sent for {title}")
+            self.__logger.info(f"Webhook sent for {title}")
         else:
-            print(
+            self.__logger.error(
                 f"Webhook not sent for {title} with {result.status_code} response:\n{result.json()}"
             )
