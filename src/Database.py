@@ -25,11 +25,9 @@ class Database:
         """
         stored_obj = self.db.smembers(object_name)
         self.db.expire(object_name, self.ttl)
-        diff = set()
-
-        if stored_obj != set():
-            diff = utils.find_difference(requested_obj, stored_obj)
-
+        
+        diff = utils.find_difference(requested_obj, stored_obj)
+        
         if stored_obj == set() and requested_obj != set():
             self.db.sadd(object_name, *requested_obj)
             self.__logger.debug(f"Set {object_name} not found in database, entry added")
