@@ -27,6 +27,7 @@ if __name__ == "__main__":
     )
 
     notification = Notifier(webhook_url=os.getenv("WEBHOOK_URL"))
+    services_filter = os.getenv("SERVICES", "").split(",")
 
     watchlist: Watchlist = tmdb.get_watchlist()
     watchlist_diff = db.compare_and_update("watchlist", watchlist.ids)[1]
@@ -36,7 +37,8 @@ if __name__ == "__main__":
     logger.info(f"Search providers for {nb} movies...")
     for idx, movie in enumerate(watchlist.movies, start=1):
         providers = tmdb.get_providers(movie.id)
-        diff = db.compare_and_update(f"movie:{movie.id}:providers", providers)[0]
+        diff = utils.search_in(reference=list(services_filter),
+                               search=db.compare_and_update(f"movie:{movie.id}:providers", providers)[0])
         if diff != set():
             services = utils.readable_list([provider for provider in diff])
             movie = tmdb.get_movie(movie.id)

@@ -2,6 +2,8 @@
 
 Monitor [TMDB](https://www.themoviedb.org/) watchlist and notify you when a movie is available on streaming services in your country.
 
+> Availability data for movies on streaming services are provided by **JustWatch**. 
+
 ## Requierements
 
 - Docker
@@ -40,8 +42,9 @@ docker run -d \
 - **TMDB_API_KEY**: TMDB v3 API key
 - **TMDB_TOKEN**: TMDB v4 bearer token
 - **TMDB_USERID**: TMDB username of the watchlist to monitor
-- *TZ* : timezone. Default : `UTC`
 - *LANGUAGE*: availability of films in your country. Default to `fr-FR`
+- *SERVICES*: filter for streaming services separated by comma. Example: `Canal+,Disney Plus,Netflix`
+- *TZ* : timezone. Default : `UTC`
 - *LOG_LEVEL* stdout verbosity. Default to `INFO`
 
 ## Contributing
@@ -60,5 +63,5 @@ docker run --rm \
 
 - [ ] Migrate to [apprise](https://github.com/caronc/apprise) for implement more notifiers
 - [ ] Allow user to modify notification body
-- [ ] Create filters for streaming services
+- [x] Create filters for streaming services
 - [ ] *TV series support ?*
