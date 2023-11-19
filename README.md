@@ -39,13 +39,12 @@ docker run -d \
 
 - **WEBHOOK_URL**: URL of Discord webhook channel to send notification
 - *CRON*: crontab trigger rules. Default : `0 20 * * *`
-- **TMDB_API_KEY**: TMDB v3 API key
-- **TMDB_TOKEN**: TMDB v4 bearer token
+- **TMDB_TOKEN**: TMDB bearer token
 - **TMDB_USERID**: TMDB username of the watchlist to monitor
 - *LANGUAGE*: availability of films in your country. Default to `fr-FR`
 - *SERVICES*: filter for streaming services separated by comma. Example: `Canal+,Disney Plus,Netflix`
 - *TZ* : timezone. Default : `UTC`
-- *LOG_LEVEL* stdout verbosity. Default to `INFO`
+- *LOGLEVEL* stdout verbosity. Default to `INFO`
 
 ## Contributing
 

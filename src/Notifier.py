@@ -29,14 +29,15 @@ class Notifier:
         return body
 
     def send_webhook(self, json_data, title):
-        result = requests.post(
-            self.webhook_url,
-            json=json_data,
-            headers={"Content-Type": "application/json"},
-        )
-        if 200 <= result.status_code < 300:
-            self.__logger.info(f"Webhook sent for {title}")
-        else:
-            self.__logger.error(
-                f"Webhook not sent for {title} with {result.status_code} response:\n{result.json()}"
+        try:
+            result = requests.post(
+                self.webhook_url,
+                json=json_data,
+                headers={"Content-Type": "application/json"},
             )
+            result.raise_for_status()
+            self.__logger.info(f"Webhook sent for {title}")
+        except requests.exceptions.HTTPError as e:
+            self.__logger.error(f"Error while sending webhook for {title}: {e}")
+            raise e
+

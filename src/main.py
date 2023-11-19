@@ -1,6 +1,7 @@
 import os
 import logging
 from datetime import timedelta
+import time
 
 import utils
 
@@ -15,12 +16,11 @@ if __name__ == "__main__":
     logging.basicConfig(level=loglevel, format="%(asctime)s [%(levelname)s] %(message)s")
     logger = logging.getLogger("app")
 
-    utils.check_env_vars(["TMDB_API_KEY", "TMDB_TOKEN", "TMDB_USERID", "WEBHOOK_URL"])
+    utils.check_env_vars(["TMDB_TOKEN", "TMDB_USERID", "WEBHOOK_URL"])
 
     db = Database(timedelta(weeks=2))
     http = HTTPSession()
     tmdb = TheMovieDatabase(
-        api_key=os.getenv("TMDB_API_KEY"),
         token=os.getenv("TMDB_TOKEN"),
         userid=os.getenv("TMDB_USERID"),
         language=os.getenv("LANGUAGE", "fr-FR"),
@@ -51,6 +51,7 @@ if __name__ == "__main__":
             notification.send_webhook(
                 json_data=message, title=f"{movie.title} ({movie.year})"
             )
+            time.sleep(0.1) # Avoid rate limit. wait 100ms between each request
 
     logger.info(
         f"{nb} movies processed. {watchlist_diff} watchlist changes, {changes} movies with new providers and {nb-changes} non-updated.\n"

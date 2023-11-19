@@ -1,5 +1,6 @@
 import logging
 import json
+from requests.exceptions import HTTPError
 
 from dataclasses import dataclass
 from typing import Optional
@@ -29,7 +30,7 @@ def read_json_mock(file_name: str) -> dict:
         return json.loads(file_content)
 
 class TheMovieDatabase:
-    def __init__(self, api_key, token, userid, language, testmode=False) -> None:
+    def __init__(self, token, userid, language, testmode=False) -> None:
         self.base_url = "https://api.themoviedb.org"
 
         self.token = token
@@ -39,18 +40,24 @@ class TheMovieDatabase:
         self.__logger = logging.getLogger("app:TheMovieDatabase")
         self.__http = HTTPSession()
 
-        self.query_params = {"api_key": api_key, "language": language}
+        self.headers = {"Authorization": f"Bearer {self.token}",
+                        "Accept": "application/json"}
+        self.query_params = {"language": language}
         self.testmode = testmode
 
     def get_watchlist(self) -> Watchlist:
         def get_one_page(page: int = 1) -> dict:
-            url = f"{self.base_url}/4/account/{self.userid}/movie/watchlist"
-            auth = f"Bearer {self.token}"
-            headers = {"Authorization": auth}
+            url = f"{self.base_url}/3/account/{self.userid}/watchlist/movies"
             params = self.query_params
             params["page"] = page # type: ignore
 
-            response = self.__http.request("GET", url, headers=headers, params=params)
+            try:
+                response = self.__http.request("GET", url, headers=self.headers, params=params)
+                response.raise_for_status()
+            except HTTPError as e:
+                self.__logger.error(f"Error while retrieving watchlist page {page} of {self.userid}: {e}")
+                raise e
+
             self.__logger.debug(f"Watchlist page {page} of {self.userid} retrieved")
             return response.json()
 
@@ -90,8 +97,13 @@ class TheMovieDatabase:
         if self.testmode:
             response = read_json_mock("/json/movie.json")
         else:
-            response = self.__http.request("GET", url, params=self.query_params).json()
-        
+            try:
+                response = self.__http.request("GET", url, headers=self.headers, params=self.query_params)
+                response.raise_for_status()
+            except HTTPError as e:
+                self.__logger.error(f"Error while retrieving movie {movie_id}: {e}")
+                raise e
+            response = response.json()
         self.__logger.debug(f"Movie {movie_id} {response['title']} retrieved")
 
         return Movie(
@@ -110,9 +122,14 @@ class TheMovieDatabase:
         if self.testmode:
             response = read_json_mock("/json/providers.json")
         else:
-            response = self.__http.request("GET", url, params=self.query_params)
-            response = response.json()
+            try:
+                response = self.__http.request("GET", url, headers=self.headers, params=self.query_params)
+                response.raise_for_status()
+            except HTTPError as e:
+                self.__logger.error(f"Error while retrieving providers for movie {movie_id}: {e}")
+                raise e
 
+            response = response.json()
         self.__logger.debug(f"Providers for movie {movie_id} retrieved")
 
         providers = set()
