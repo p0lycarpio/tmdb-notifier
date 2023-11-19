@@ -1,6 +1,6 @@
-FROM alpine AS rootfs-stage
+FROM alpine:3.18 AS rootfs-stage
 
-ARG S6_OVERLAY_VERSION="3.1.5.0"
+ARG S6_OVERLAY_VERSION="3.1.6.0"
 ARG S6_OVERLAY_ARCH="x86_64"
 
 RUN apk add --no-cache \
@@ -22,7 +22,7 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLA
 RUN tar -C /root-out/ -Jxpf /tmp/s6-overlay-symlinks-arch.tar.xz
 
 
-FROM python:3.10-alpine
+FROM python:3.10-alpine3.18
 WORKDIR /app
 COPY --from=rootfs-stage /root-out/ /
 
@@ -35,7 +35,7 @@ RUN apk add --no-cache \
     bash \
     ca-certificates \
     coreutils \
-    redis \
+    redis=7.0.14-r0 \
     tzdata && \
     rm -rf /tmp/*
 
