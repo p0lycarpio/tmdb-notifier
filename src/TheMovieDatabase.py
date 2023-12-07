@@ -77,10 +77,10 @@ class TheMovieDatabase:
             fetch = get_one_page()
             all_movies = get_all_watchlist_results(fetch["total_pages"])
         
-        ids = set(str())
+        ids = set()
         movies = list()
         for movie in all_movies["results"]:
-            ids.add(str(movie.get("id")))
+            ids.add(int(movie.get("id")))
             movies.append(
                 Movie(
                     id=movie.get("id"),

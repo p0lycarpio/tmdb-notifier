@@ -4,15 +4,11 @@ import logging
 from typing import Any, List
 
 
-def find_difference(set1: set, set2: set) -> set:
-    """Returns elements in set1 which are not in set2"""
-    return set1.difference(set2)
-
-
-def cross_difference_number(set1: set, set2: set) -> int:
+def find_differences(set1: set, set2: set) -> tuple[set, set, int]:
+    """Returns elements in set1 which are not in set2 and vice versa"""
     s1 = set1.difference(set2)
     s2 = set2.difference(set1)
-    return len(s1) + len(s2)
+    return (s1, s2, abs(len(s1) + len(s2)) )
 
 
 def readable_list(seq: List[Any]) -> str:
