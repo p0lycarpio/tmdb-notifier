@@ -23,9 +23,9 @@ class Database:
             stored_obj: set = self.db[object_name]
         except KeyError:
             stored_obj = set()
-        
+
         diff, outdated, changes_nb = find_differences(requested_obj, stored_obj)
-        
+
         if not stored_obj and requested_obj:
             self.db[object_name] = requested_obj
             self.__logger.debug(f"Set {object_name} not found in database, entry added")
@@ -37,7 +37,9 @@ class Database:
                 self.db[object_name] = diff
             self.__logger.debug(f"Set {object_name} updated in database")
 
-        self.__logger.debug(f"Set {object_name} has {changes_nb} changes : {diff or outdated}")
+        self.__logger.debug(
+            f"Set {object_name} has {changes_nb} changes : {diff or outdated}"
+        )
         return (diff, changes_nb)
 
     def cleanup(self):
@@ -50,4 +52,3 @@ class Database:
             if id not in self.db["watchlist"]:
                 self.__logger.debug(f"Outdated entry {key} in database removed")
                 del self.db[key]
-                

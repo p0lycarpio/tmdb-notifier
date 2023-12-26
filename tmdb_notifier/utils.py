@@ -8,7 +8,7 @@ def find_differences(set1: set, set2: set) -> tuple[set, set, int]:
     """Returns elements in set1 which are not in set2 and vice versa"""
     s1 = set1.difference(set2)
     s2 = set2.difference(set1)
-    return (s1, s2, abs(len(s1) + len(s2)) )
+    return (s1, s2, abs(len(s1) + len(s2)))
 
 
 def readable_list(seq: List[Any]) -> str:
@@ -30,22 +30,19 @@ def check_env_vars(variables_names: list):
 
     if error:
         exit(1)
-  
+
 
 def search_in(reference: list, search: set, regex: bool = True) -> set:
     """Returns the set of elements in `reference` which are in `search`.
-       Use regex search. Returns `search` if `reference` is empty."""
-    if not reference or '' in reference:
+    Use regex search. Returns `search` if `reference` is empty."""
+    if not reference or "" in reference:
         return search
     elif regex:
         return {
-            w for w in reference
+            w
+            for w in reference
             for s in search
             if s in w or re.search(re.escape(s), w, re.IGNORECASE)
         }
     else:
-        return {
-            w for w in reference
-            for s in search
-            if s in w
-        }
+        return {w for w in reference for s in search if s in w}

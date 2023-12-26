@@ -39,7 +39,9 @@ class Apprise(Notifier):
             self.apprise.notify(title=title, body=body)
             self.logger.error(f"Webhook sent for {movie.title}")
         except Exception as e:
-            self.logger.error(f"Error while sending Apprise notification for {movie.title}: {e}")
+            self.logger.error(
+                f"Error while sending Apprise notification for {movie.title}: {e}"
+            )
             raise e
         self.apprise.clear()
 

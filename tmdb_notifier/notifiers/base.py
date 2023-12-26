@@ -1,6 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 
+
 class Notifier(ABC):
     @abstractmethod
     def __init__(self):
