@@ -5,18 +5,9 @@ from requests.exceptions import HTTPError
 from dataclasses import dataclass
 from typing import Optional
 
-from Session import HTTPSession
+from src.Session import HTTPSession
 
-
-@dataclass
-class Movie:
-    id: int
-    title: str
-    year: int
-    overview: Optional[str] = None
-    image: Optional[str] = None
-    poster: Optional[str] = None
-    runtime: Optional[int] = None
+from src.models import Movie
 
 
 @dataclass
@@ -81,13 +72,7 @@ class TheMovieDatabase:
         movies = list()
         for movie in all_movies["results"]:
             ids.add(str(movie.get("id")))
-            movies.append(
-                Movie(
-                    id=movie.get("id"),
-                    title=movie.get("title"),
-                    year=movie.get("release_date")[0:4],
-                )
-            )
+            movies.append(Movie(movie))
 
         return Watchlist(ids, movies)
 
@@ -106,15 +91,21 @@ class TheMovieDatabase:
             response = response.json()
         self.__logger.debug(f"Movie {movie_id} {response['title']} retrieved")
 
-        return Movie(
-            id=response["id"],
-            title=response["title"],
-            year=response["release_date"][0:4],
-            overview=response["overview"],
-            image=response["backdrop_path"],
-            poster=response["poster_path"],
-            runtime=response["runtime"],
-        )
+        return Movie(response)
+    
+    def get_credits(self, movie_id: int) -> dict:
+        url = f"{self.base_url}/3/movie/{movie_id}/credits"
+        try:
+            response = self.__http.request("GET", url, headers=self.headers, params=self.query_params)
+            response.raise_for_status()
+        except HTTPError as e:
+            self.__logger.error(f"Error while retrieving credits for movie {movie_id}: {e}")
+            raise e
+
+        response = response.json()
+        self.__logger.debug(f"Credits for movie {movie_id} retrieved")
+
+        return response
 
     def get_providers(self, movie_id: int) -> set:
         url = f"{self.base_url}/3/movie/{movie_id}/watch/providers"

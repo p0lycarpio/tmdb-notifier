@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import logging
 import redis
-import utils
+from src.utils import *
 
 
 class Database:
@@ -26,7 +26,7 @@ class Database:
         stored_obj = self.db.smembers(object_name)
         self.db.expire(object_name, self.ttl)
         
-        diff = utils.find_difference(requested_obj, stored_obj)
+        diff = find_difference(requested_obj, stored_obj)
         
         if stored_obj == set() and requested_obj != set():
             self.db.sadd(object_name, *requested_obj)
@@ -35,6 +35,6 @@ class Database:
             self.__logger.debug(f"Set {object_name} updated in database")
             self.db.sadd(object_name, *diff)
 
-        changes_nb = utils.cross_difference_number(stored_obj, requested_obj)
+        changes_nb = cross_difference_number(stored_obj, requested_obj)
         self.__logger.debug(f"Set {object_name} has {changes_nb} changes : {diff}")
         return (diff, changes_nb)
