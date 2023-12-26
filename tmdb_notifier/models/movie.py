@@ -1,4 +1,4 @@
-from src.utils import readable_list
+from tmdb_notifier.utils import readable_list
 
 class Movie:
     def __init__(self, data: dict) -> None:

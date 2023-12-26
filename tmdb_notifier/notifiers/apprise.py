@@ -3,8 +3,8 @@ import logging
 import apprise
 from apprise import AppriseAsset
 
-from src.models import Movie
-from src.notifiers import Notifier
+from tmdb_notifier.models import Movie
+from tmdb_notifier.notifiers import Notifier
 
 
 class Apprise(Notifier):

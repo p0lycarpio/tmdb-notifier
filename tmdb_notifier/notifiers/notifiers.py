@@ -2,9 +2,9 @@ import os
 import re
 import logging
 
-from src.models import Movie
-from src.notifiers.apprise import Apprise
-from src.notifiers.webhook import Webhook
+from tmdb_notifier.models import Movie
+from tmdb_notifier.notifiers.apprise import Apprise
+from tmdb_notifier.notifiers.webhook import Webhook
 
 class Notifiers:
     def __init__(self) -> None:

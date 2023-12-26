@@ -42,7 +42,7 @@ COPY requirements.txt /app/
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # copy app and services
-COPY src/ /app/
+COPY tmdb_notifier/ tmdb_notifier/
 COPY etc/ /etc/
 
 ENTRYPOINT ["/init"]

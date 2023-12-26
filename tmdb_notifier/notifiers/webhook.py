@@ -4,8 +4,8 @@ import logging
 
 import requests
 
-from src.models import Movie
-from src.notifiers import Notifier
+from tmdb_notifier.models import Movie
+from tmdb_notifier.notifiers import Notifier
 
 class Webhook(Notifier):
     """Notifier for custom Webhooks"""

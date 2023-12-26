@@ -5,9 +5,9 @@ from requests.exceptions import HTTPError
 from dataclasses import dataclass
 from typing import Optional
 
-from src.Session import HTTPSession
+from tmdb_notifier.Session import HTTPSession
 
-from src.models import Movie
+from tmdb_notifier.models import Movie
 
 
 @dataclass

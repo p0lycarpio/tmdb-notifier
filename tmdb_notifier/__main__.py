@@ -2,12 +2,12 @@ import os
 import logging
 import time
 
-from src.utils import *
+from tmdb_notifier.utils import *
 
-from src.Database import Database
-from src.notifiers import Notifiers
-from src.Session import HTTPSession
-from src.TheMovieDatabase import TheMovieDatabase, Watchlist
+from tmdb_notifier.Database import Database
+from tmdb_notifier.notifiers import Notifiers
+from tmdb_notifier.Session import HTTPSession
+from tmdb_notifier.TheMovieDatabase import TheMovieDatabase, Watchlist
 
 
 if __name__ == "__main__":

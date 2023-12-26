@@ -1,6 +1,6 @@
 import shelve
 import logging
-from src.utils import *
+from tmdb_notifier.utils import *
 
 
 class Database:
