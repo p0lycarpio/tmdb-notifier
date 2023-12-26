@@ -35,7 +35,6 @@ RUN apk add --no-cache \
     bash \
     ca-certificates \
     coreutils \
-    redis=7.0.14-r0 \
     tzdata && \
     rm -rf /tmp/*
 

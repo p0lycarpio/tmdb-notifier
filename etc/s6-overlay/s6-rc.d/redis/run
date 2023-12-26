@@ -1,4 +1,0 @@
-#!/usr/bin/with-contenv bash
-# shellcheck shell=bash
-
-redis-server --unixsocket /var/run/redis.sock --unixsocketperm 770 --daemonize yes

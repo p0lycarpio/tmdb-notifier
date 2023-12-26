@@ -1,6 +1,5 @@
 import os
 import logging
-from datetime import timedelta
 import time
 
 from src.utils import *
@@ -18,7 +17,7 @@ if __name__ == "__main__":
 
     check_env_vars(["TMDB_TOKEN", "TMDB_USERID"])
 
-    db = Database(timedelta(weeks=2))
+    db = Database("/data/tmdb.db")
     http = HTTPSession()
     tmdb = TheMovieDatabase(
         token=os.getenv("TMDB_TOKEN"),
@@ -51,4 +50,6 @@ if __name__ == "__main__":
     logger.info(
         f"{nb} movies processed. {watchlist_diff} watchlist changes, {changes} movies with new providers and {nb-changes} non-updated.\n"
     )
+    db.cleanup()
+    db.close()
     exit(0)
