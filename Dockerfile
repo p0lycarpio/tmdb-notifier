@@ -1,6 +1,6 @@
 FROM alpine:3.18 AS rootfs-stage
 
-ARG S6_OVERLAY_VERSION="3.1.6.0"
+ARG S6_OVERLAY_VERSION="3.1.6.2"
 ARG S6_OVERLAY_ARCH="x86_64"
 
 RUN apk add --no-cache \

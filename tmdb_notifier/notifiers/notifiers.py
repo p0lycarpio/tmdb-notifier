@@ -19,14 +19,14 @@ class Notifiers:
                 "No notifier configured. Please set APPRISE_URL or WEBHOOK_URL"
             )
 
-    def send(self, movie: Movie, services):
+    def send(self, movie: Movie, services: str):
         body = self.create_message(movie, services)
-        self.notifier.send(movie=movie, title=f"TMDB Notification :", body=body)
+        self.notifier.send(movie, body)
 
     def create_message(self, movie: Movie, services: str) -> str:
         message = os.getenv(
             "NOTIFICATION_BODY",
-            f"{movie.title} ({movie.year}) is available on {services} !",
+            f"{movie.title} ({movie.year}) is available on {services} !\n {movie.url}",
         )
         variables = re.findall(r"\$\((.*?)\)", message)
         for variable in variables:
@@ -39,4 +39,4 @@ class Notifiers:
                 )
             else:
                 message = message.replace("$(services)", str(services))
-        return message
+        return str(message)

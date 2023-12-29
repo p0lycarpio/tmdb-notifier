@@ -12,11 +12,11 @@ class Notifier(ABC):
         """Get notifier name"""
         return self.__class__.__name__
 
-    def send(self, movie, title, body) -> None:
+    def send(self, movie, body) -> None:
         """Send notification for new movie"""
         self.logger.debug("Sending %s Notification", self.name)
-        self._send(movie, title, body)
+        self._send(movie, body)
 
     @abstractmethod
-    def _send(self, movie, title, body) -> None:
+    def _send(self, movie, body) -> None:
         """Send movie information"""

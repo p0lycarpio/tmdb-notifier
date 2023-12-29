@@ -8,7 +8,7 @@ class Movie:
         self.year = data.get("release_date", int())[0:4]
         self.image = f"https://image.tmdb.org/t/p/w500{data.get('backdrop_path', '')}"
         self.overview = data.get("overview", "")
-        self.poster = data.get("poster_path", "")
+        self.poster = f"https://image.tmdb.org/t/p/w500{data.get('poster_path', '')}"
         self.runtime = data.get("runtime", int())
         self.genres = readable_list([g.get("name") for g in data.get("genres", [])])
         self.languages = readable_list([l.get("iso_639_1") for l in data.get("spoken_languages", [])])

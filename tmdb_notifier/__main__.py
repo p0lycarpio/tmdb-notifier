@@ -24,7 +24,7 @@ if __name__ == "__main__":
     tmdb = TheMovieDatabase(
         token=os.getenv("TMDB_TOKEN"),
         userid=os.getenv("TMDB_USERID"),
-        language=os.getenv("LANGUAGE", "fr-FR"),
+        language=os.getenv("LANGUAGE", "en-US"),
     )
 
     notification = Notifiers()

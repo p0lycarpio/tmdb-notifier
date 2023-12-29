@@ -12,12 +12,12 @@ def find_differences(set1: set, set2: set) -> tuple[set, set, int]:
 
 
 def readable_list(seq: List[Any]) -> str:
-    """Return a grammatically correct human readable string (with an Oxford comma)."""
+    """Return a correct human readable string (with an Oxford comma)."""
     # Ref: https://stackoverflow.com/a/53981846/
     seq = [str(s) for s in seq]
     if len(seq) < 3:
-        return " et ".join(seq)
-    return ", ".join(seq[:-1]) + ", et " + seq[-1]
+        return " & ".join(seq)
+    return ", ".join(seq[:-1]) + ", & " + seq[-1]
 
 
 def check_env_vars(variables_names: list):

@@ -26,17 +26,14 @@ class Apprise(Notifier):
         )
         self.url = url
 
-    def _send(self, movie: Movie, title, body) -> None:
+    def _send(self, movie: Movie, body) -> None:
         """Sends movie notification via configured Apprise URL"""
-        url = self.url
-
-        self.logger.debug("Apprise url: %s", url)
-        self.logger.debug("Apprise title: %s", title)
+        self.logger.debug("Apprise url: %s", self.url)
         self.logger.debug("Apprise body: %s", body)
 
         self.apprise.add(self.url)
         try:
-            self.apprise.notify(title=title, body=body)
+            self.apprise.notify(body=body)
             self.logger.error(f"Webhook sent for {movie.title}")
         except Exception as e:
             self.logger.error(
@@ -44,6 +41,3 @@ class Apprise(Notifier):
             )
             raise e
         self.apprise.clear()
-
-    def __repr__(self) -> str:
-        return f"Apprise: {self.url}"

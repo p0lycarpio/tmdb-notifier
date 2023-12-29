@@ -11,7 +11,7 @@ from tmdb_notifier.models import Movie
 
 @dataclass
 class Watchlist:
-    ids: set[str]
+    ids: set[int]
     movies: list[Movie]
 
 
@@ -29,7 +29,7 @@ class TheMovieDatabase:
         self.userid = userid
         self.country = language[3:5] or language[0:2].upper()
 
-        self.__logger = logging.getLogger("app:TheMovieDatabase")
+        self.logger = logging.getLogger("app:TheMovieDatabase")
         self.__http = HTTPSession()
 
         self.headers = {
@@ -51,12 +51,12 @@ class TheMovieDatabase:
                 )
                 response.raise_for_status()
             except HTTPError as e:
-                self.__logger.error(
+                self.logger.error(
                     f"Error while retrieving watchlist page {page} of {self.userid}: {e}"
                 )
                 raise e
 
-            self.__logger.debug(f"Watchlist page {page} of {self.userid} retrieved")
+            self.logger.debug(f"Watchlist page {page} of {self.userid} retrieved")
             return response.json()
 
         def get_all_watchlist_results(total_pages) -> dict:
@@ -66,7 +66,7 @@ class TheMovieDatabase:
                 all_results["results"].extend(response["results"])
                 all_results["total_results"] = response["total_results"]
 
-            self.__logger.info("Watchlist retrieved")
+            self.logger.info("Watchlist retrieved")
             return all_results
 
         if self.testmode:
@@ -95,10 +95,10 @@ class TheMovieDatabase:
                 )
                 response.raise_for_status()
             except HTTPError as e:
-                self.__logger.error(f"Error while retrieving movie {movie_id}: {e}")
+                self.logger.error(f"Error while retrieving movie {movie_id}: {e}")
                 raise e
             response = response.json()
-        self.__logger.debug(f"Movie {movie_id} {response['title']} retrieved")
+        self.logger.debug(f"Movie {movie_id} {response['title']} retrieved")
 
         return Movie(response)
 
@@ -110,13 +110,13 @@ class TheMovieDatabase:
             )
             response.raise_for_status()
         except HTTPError as e:
-            self.__logger.error(
+            self.logger.error(
                 f"Error while retrieving credits for movie {movie_id}: {e}"
             )
             raise e
 
         response = response.json()
-        self.__logger.debug(f"Credits for movie {movie_id} retrieved")
+        self.logger.debug(f"Credits for movie {movie_id} retrieved")
 
         return response
 
@@ -132,13 +132,13 @@ class TheMovieDatabase:
                 )
                 response.raise_for_status()
             except HTTPError as e:
-                self.__logger.error(
+                self.logger.error(
                     f"Error while retrieving providers for movie {movie_id}: {e}"
                 )
                 raise e
 
             response = response.json()
-        self.__logger.debug(f"Providers for movie {movie_id} retrieved")
+        self.logger.debug(f"Providers for movie {movie_id} retrieved")
 
         providers = set()
 

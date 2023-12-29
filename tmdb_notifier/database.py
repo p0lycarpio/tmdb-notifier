@@ -6,7 +6,7 @@ from tmdb_notifier.utils import *
 class Database:
     def __init__(self, db: str):
         self.db = shelve.open(db, writeback=True)
-        self.__logger = logging.getLogger("app:Database")
+        self.logger = logging.getLogger("app:Database")
 
     def close(self):
         """Save database and close connection"""
@@ -28,16 +28,16 @@ class Database:
 
         if not stored_obj and requested_obj:
             self.db[object_name] = requested_obj
-            self.__logger.debug(f"Set {object_name} not found in database, entry added")
+            self.logger.debug(f"Set {object_name} not found in database, entry added")
         elif diff or outdated:
             # force update of watchlist
             if object_name == "watchlist":
                 self.db[object_name] = requested_obj
             else:
                 self.db[object_name] = diff
-            self.__logger.debug(f"Set {object_name} updated in database")
+            self.logger.debug(f"Set {object_name} updated in database")
 
-        self.__logger.debug(
+        self.logger.debug(
             f"Set {object_name} has {changes_nb} changes : {diff or outdated}"
         )
         return (diff, changes_nb)
@@ -50,5 +50,5 @@ class Database:
                 continue
             id = int(key.split(":")[1])
             if id not in self.db["watchlist"]:
-                self.__logger.debug(f"Outdated entry {key} in database removed")
+                self.logger.debug(f"Outdated entry {key} in database removed")
                 del self.db[key]
