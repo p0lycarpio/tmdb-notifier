@@ -84,19 +84,13 @@ Other list variables about credits :
 
 Contributors, welcome ! Fork the repo and open PRs.
 
-### Testing with JSON
-
-```bash
-docker run --rm \
-    --env-file .env \
-    --name tmdb-notifier -v $(pwd)/json/:/json/ tmdb-notifier
-```
+Run tests with `pytest`.
 
 ### TODO
 
 - [x] Migrate to [apprise](https://github.com/caronc/apprise) for implement more notifiers
 - [x] Allow user to modify notification body
 - [x] Create filters for streaming services
-- [ ] Implement tests
+- [x] Implement tests
 - [ ] Build Docker image with actions and push to GHCR
 - [ ] *TV series support ?*

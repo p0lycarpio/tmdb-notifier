@@ -22,7 +22,7 @@ def read_json_mock(file_name: str) -> dict:
 
 
 class TheMovieDatabase:
-    def __init__(self, token, userid, language, testmode=False) -> None:
+    def __init__(self, token, userid, language) -> None:
         self.base_url = "https://api.themoviedb.org"
 
         self.token = token
@@ -37,9 +37,8 @@ class TheMovieDatabase:
             "Accept": "application/json",
         }
         self.query_params = {"language": language}
-        self.testmode = testmode
 
-    def get_watchlist(self) -> Watchlist:
+    def get_watchlist(self, all_movies=None) -> Watchlist:
         def get_one_page(page: int = 1) -> dict:
             url = f"{self.base_url}/3/account/{self.userid}/watchlist/movies"
             params = self.query_params
@@ -69,9 +68,7 @@ class TheMovieDatabase:
             self.logger.info("Watchlist retrieved")
             return all_results
 
-        if self.testmode:
-            all_movies = read_json_mock("/json/watchlist.json")
-        else:
+        if not all_movies:
             fetch = get_one_page()
             all_movies = get_all_watchlist_results(fetch["total_pages"])
 
@@ -83,12 +80,10 @@ class TheMovieDatabase:
 
         return Watchlist(ids, movies)
 
-    def get_movie(self, movie_id: int) -> Movie:
+    def get_movie(self, movie_id: int, response=None) -> Movie:
         url = f"{self.base_url}/3/movie/{movie_id}"
 
-        if self.testmode:
-            response = read_json_mock("/json/movie.json")
-        else:
+        if not response:
             try:
                 response = self.__http.request(
                     "GET", url, headers=self.headers, params=self.query_params
@@ -102,30 +97,28 @@ class TheMovieDatabase:
 
         return Movie(response)
 
-    def get_credits(self, movie_id: int) -> dict:
+    def get_credits(self, movie_id: int, response=None) -> dict:
         url = f"{self.base_url}/3/movie/{movie_id}/credits"
-        try:
-            response = self.__http.request(
-                "GET", url, headers=self.headers, params=self.query_params
-            )
-            response.raise_for_status()
-        except HTTPError as e:
-            self.logger.error(
-                f"Error while retrieving credits for movie {movie_id}: {e}"
-            )
-            raise e
-
-        response = response.json()
+        if not response:
+            try:
+                response = self.__http.request(
+                    "GET", url, headers=self.headers, params=self.query_params
+                )
+                response.raise_for_status()
+            except HTTPError as e:
+                self.logger.error(
+                    f"Error while retrieving credits for movie {movie_id}: {e}"
+                )
+                raise e
+            response = response.json()
         self.logger.debug(f"Credits for movie {movie_id} retrieved")
 
         return response
 
-    def get_providers(self, movie_id: int) -> set:
+    def get_providers(self, movie_id: int, response=None) -> set:
         url = f"{self.base_url}/3/movie/{movie_id}/watch/providers"
 
-        if self.testmode:
-            response = read_json_mock("/json/providers.json")
-        else:
+        if not response:
             try:
                 response = self.__http.request(
                     "GET", url, headers=self.headers, params=self.query_params

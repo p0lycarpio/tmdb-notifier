@@ -12,6 +12,22 @@ class Database:
         """Save database and close connection"""
         self.db.close()
 
+    def get(self, key: str):
+        """Get value from database"""
+        return self.db[key]
+    
+    def create(self, key: str, value: set):
+        """Create new entry in database"""
+        self.db[key] = value
+
+    def update(self, key: str, value: set):
+        """Update entry in database"""
+        self.db[key] = value
+
+    def delete(self, key: str):
+        """Delete entry from database"""
+        del self.db[key]
+
     def compare_and_update(
         self, object_name: str, requested_obj: set
     ) -> tuple[set, int]:

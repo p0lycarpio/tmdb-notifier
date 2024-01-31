@@ -5,7 +5,7 @@ class Movie:
         self.id = data.get("id", int())
         self.title = data.get("title", "")
         self.original_title = data.get("original_title", "")
-        self.year = data.get("release_date", int())[0:4]
+        self.year = int(data.get("release_date", int())[0:4])
         self.image = f"https://image.tmdb.org/t/p/w500{data.get('backdrop_path', '')}"
         self.overview = data.get("overview", "")
         self.poster = f"https://image.tmdb.org/t/p/w500{data.get('poster_path', '')}"
