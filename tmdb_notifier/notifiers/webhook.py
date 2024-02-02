@@ -12,10 +12,10 @@ from tmdb_notifier.session import HTTPSession
 class Webhook(Notifier):
     """Notifier for custom Webhooks"""
 
-    def __init__(self, url):
+    def __init__(self, url, encoding):
         self.logger = logging.getLogger("app:Webhook")
         self.http = HTTPSession()
-        self.encoding = os.getenv("WEBHOOK_TYPE", "application/text")
+        self.encoding = encoding
         self.url = url
 
     def _send(self, movie: Movie, body: str) -> None:

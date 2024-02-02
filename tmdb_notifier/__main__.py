@@ -1,6 +1,6 @@
-import os
 import logging
 import time
+import sys
 
 from tmdb_notifier.utils import *
 
@@ -8,27 +8,28 @@ from tmdb_notifier.database import Database
 from tmdb_notifier.notifiers import Notifiers
 from tmdb_notifier.session import HTTPSession
 from tmdb_notifier.api import TheMovieDatabase, Watchlist
-
+from tmdb_notifier.config import Configuration
 
 if __name__ == "__main__":
-    loglevel = os.environ.get("LOGLEVEL", "INFO").upper()
+    # Return the value of a configuration attribute
+    if len(sys.argv) > 1:
+        print(getattr(Configuration(), sys.argv[1]))
+        exit(0)
+    
+    config = Configuration()
     logging.basicConfig(
-        level=loglevel, format="%(asctime)s [%(levelname)s] %(message)s"
+        level=config.loglevel, format="%(asctime)s [%(levelname)s] %(message)s"
     )
     logger = logging.getLogger("app")
-
-    check_env_vars(["TMDB_TOKEN", "TMDB_USERID"])
 
     db = Database("/data/tmdb.db")
     http = HTTPSession()
     tmdb = TheMovieDatabase(
-        token=os.getenv("TMDB_TOKEN"),
-        userid=os.getenv("TMDB_USERID"),
-        language=os.getenv("LANGUAGE", "en-US"),
+        token=config.tmdb_token,
+        userid=config.tmdb_userid,
+        language=config.language,
     )
-
-    notification = Notifiers()
-    services_filter = os.getenv("SERVICES", "").split(",")
+    notification = Notifiers(configuration=config)
 
     watchlist: Watchlist = tmdb.get_watchlist()
     watchlist_diff = db.compare_and_update("watchlist", watchlist.ids)[1]
@@ -39,7 +40,7 @@ if __name__ == "__main__":
     for idx, movie in enumerate(watchlist.movies, start=1):
         providers = tmdb.get_providers(movie.id)
         diff = search_in(
-            reference=list(services_filter),
+            reference=list(config.services),
             search=db.compare_and_update(f"movie:{movie.id}:providers", providers)[0],
         )
         if diff != set():

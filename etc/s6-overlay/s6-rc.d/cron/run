@@ -1,14 +1,8 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
-DEFAULT_CRON="0 20 * * *"
-
+CRON=$(cd /app && python3 -m tmdb_notifier cron)
 sed -i '$d' /etc/crontabs/root
-
-if [[ -z ${CRON} ]]; then
-    echo "${DEFAULT_CRON} cd /app && python3 -m tmdb_notifier" >> /etc/crontabs/root
-else
-    echo "${CRON} cd /app && python3 -m tmdb_notifier" >> /etc/crontabs/root
-fi
+echo "${CRON} cd /app && python3 -m tmdb_notifier" >> /etc/crontabs/root
 
 exec /usr/sbin/crond -f -S -l 5

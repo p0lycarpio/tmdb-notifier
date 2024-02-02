@@ -19,20 +19,23 @@ def readable_list(seq: List[Any]) -> str:
     return ", ".join(seq[:-1]) + " & " + seq[-1]
 
 
-def check_env_vars(variables_names: list):
-    error = False
-    for var_name in variables_names:
-        var_value = os.getenv(var_name)
-        if var_value is None:
-            logging.critical(f"The environnement variable {var_name} is not defined.")
-            error = True
-    if error:
-        exit(1)
-
-
 def search_in(reference: list, search: set) -> set:
     """Returns the set of elements in `reference` which are in `search`"""
     if not reference or "" in reference:
         return search
     else:
         return {w for w in reference for s in search if s in w}
+
+
+def flatten_dict(dictionary: dict) -> dict:
+    """Flatten a dictionary by combining keys"""
+    flattened = {}
+    for key, value in dictionary.items():
+        if isinstance(value, dict):
+            # Recursively flatten the sub-dictionary
+            flattened.update(flatten_dict(value))
+        else:
+            # Form the flattened key
+            flattened[key] = value
+
+    return flattened

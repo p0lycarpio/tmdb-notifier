@@ -36,7 +36,11 @@ docker run -d \
     --name tmdb-notifier tmdb-notifier
 ```
 
-## Environment variables
+## Configuration
+
+Container can be setup via a [TOML configuration file](./config.sample.toml) or environnement variables.
+
+The configuration file must be placed in `/data/config.toml`. However, the environnement variables will be loaded.
 
 Variables in **bold** are required.
 
@@ -92,5 +96,6 @@ Run tests with `pytest`.
 - [x] Allow user to modify notification body
 - [x] Create filters for streaming services
 - [x] Implement tests
+- [x] Create configuration file and implement class
 - [ ] Build Docker image with actions and push to GHCR
 - [ ] *TV series support ?*
