@@ -22,7 +22,7 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLA
 RUN tar -C /root-out/ -Jxpf /tmp/s6-overlay-symlinks-arch.tar.xz
 
 
-FROM python:3.10-alpine3.18
+FROM python:3.11-alpine3.18
 WORKDIR /app
 COPY --from=rootfs-stage /root-out/ /
 
