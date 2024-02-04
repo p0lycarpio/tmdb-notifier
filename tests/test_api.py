@@ -9,12 +9,15 @@ from tmdb_notifier.api import TheMovieDatabase
 def _load_fixture(filename: str) -> str:
     return pathlib.Path(__file__).parent.joinpath("fixtures", filename).read_text()
 
+
 @pytest.fixture
 def tmdb():
     return TheMovieDatabase(
         token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
         userid="username",
-        language="en-US")
+        language="en-US",
+    )
+
 
 def test_get_watchlist(tmdb):
     mock = json.loads(_load_fixture("watchlist.json"))
@@ -23,13 +26,16 @@ def test_get_watchlist(tmdb):
     assert watchlist.movies[0].id == 695
     assert watchlist.movies[1].id == 6977
 
+
 def test_get_movie(tmdb):
     mock = json.loads(_load_fixture("movie.json"))
     movie = tmdb.get_movie(0, mock)
     assert movie.id == 6977
     assert movie.title == "No Country for Old Men"
     assert movie.year == 2007
-    assert movie.image == "https://image.tmdb.org/t/p/w500/kd9jFTTabg4xJpHDgxY0h8F9BzG.jpg"
+    assert (
+        movie.image == "https://image.tmdb.org/t/p/w500/kd9jFTTabg4xJpHDgxY0h8F9BzG.jpg"
+    )
     assert movie.genres == "Crime, Drame & Thriller"
     assert movie.runtime == 122
 

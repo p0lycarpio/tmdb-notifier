@@ -15,7 +15,7 @@ class Database:
     def get(self, key: str):
         """Get value from database"""
         return self.db[key]
-    
+
     def create(self, key: str, value: set):
         """Create new entry in database"""
         self.db[key] = value

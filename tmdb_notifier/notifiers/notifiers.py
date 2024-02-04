@@ -1,4 +1,3 @@
-import os
 import re
 import logging
 
@@ -6,6 +5,7 @@ from tmdb_notifier.models import Movie
 from tmdb_notifier.notifiers.apprise import Apprise
 from tmdb_notifier.notifiers.webhook import Webhook
 from tmdb_notifier.config import Configuration
+
 
 class Notifiers:
     def __init__(self, configuration: Configuration) -> None:
@@ -29,7 +29,10 @@ class Notifiers:
         self.notifier.send(movie, body)
 
     def create_message(self, movie: Movie, services: str) -> str:
-        message = self.notification_body or f"{movie.title} ({movie.year}) is available on {services} !\n {movie.url}"
+        message = (
+            self.notification_body
+            or f"{movie.title} ({movie.year}) is available on {services} !\n {movie.url}"
+        )
         variables = re.findall(r"\$\((.*?)\)", message)
         for variable in variables:
             if variable in movie.__dict__:

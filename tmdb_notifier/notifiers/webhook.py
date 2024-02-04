@@ -1,5 +1,4 @@
 import json
-import os
 import logging
 
 import requests
@@ -21,7 +20,11 @@ class Webhook(Notifier):
     def _send(self, movie: Movie, body: str) -> None:
         """Sends movie notification via configured Webhook endpoint"""
         if "json" in self.encoding:
-            json_data = json.loads(body)
+            try:
+                json_data = json.loads(body)
+            except json.JSONDecodeError as e:
+                self.logger.error(f"Error while parsing JSON: {e}")
+                raise e
             body_data = None
         else:
             json_data = None

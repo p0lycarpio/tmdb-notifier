@@ -15,7 +15,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         print(getattr(Configuration(), sys.argv[1]))
         exit(0)
-    
+
     config = Configuration()
     logging.basicConfig(
         level=config.loglevel, format="%(asctime)s [%(levelname)s] %(message)s"

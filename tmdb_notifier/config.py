@@ -34,7 +34,8 @@ class ConfigValues:
         if self.tmdb_userid is None or self.tmdb_userid == "":
             raise ValueError("No TMDB user ID provided")
         if self.services != "":
-            self.services = [s.strip() for s in self.services.split(",")] # type: ignore
+            self.services = [s.strip() for s in self.services.split(",")]  # type: ignore
+
 
 class Configuration:
     def __init__(self, file: str = "/data/config.toml", **kwargs):
@@ -64,45 +65,44 @@ class Configuration:
 
         # Map values to configuration attributes
         self.config = ConfigValues(**config)
-    
 
     ### Properties ###
     @property
     def tmdb_token(self):
         return self.config.tmdb_token
-    
+
     @property
     def tmdb_userid(self):
         return self.config.tmdb_userid
-    
+
     @property
     def webhook_url(self):
         return self.config.webhook_url
-    
+
     @property
     def webhook_type(self):
         return self.config.webhook_type
-    
+
     @property
     def apprise_url(self):
         return self.config.apprise_url
-    
+
     @property
     def language(self):
         return self.config.language
-    
+
     @property
     def services(self):
         return self.config.services
-    
+
     @property
     def loglevel(self):
         return self.config.loglevel
-    
+
     @property
     def notification_body(self):
         return self.config.notification_body
-    
+
     @property
     def cron(self):
         return self.config.cron

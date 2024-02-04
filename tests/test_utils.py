@@ -1,5 +1,6 @@
 from tmdb_notifier.utils import *
 
+
 def test_find_differences():
     set1 = {"Canal+", "OCS", "Disney+", "Paramount+"}
     set2 = {"Disney+", "Paramount+", "MUBI", "Arte"}
@@ -8,6 +9,7 @@ def test_find_differences():
     assert diff2 == {"MUBI", "Arte"}
     assert total_diff == 4
 
+
 def test_readable_list():
     seq1 = [1, 2]
     seq2 = ["Canal+", "Netflix", "OCS"]
@@ -15,6 +17,7 @@ def test_readable_list():
     assert readable_list(seq1) == "1 & 2"
     assert readable_list(seq2) == "Canal+, Netflix & OCS"
     assert readable_list(seq3) == "MUBI"
+
 
 def test_search_in():
     reference = ["Canal+", "Netflix", "OCS"]
