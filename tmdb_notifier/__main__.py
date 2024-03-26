@@ -48,7 +48,8 @@ if __name__ == "__main__":
         if diff != set():
             services = readable_list([provider for provider in diff])
             movie = tmdb.get_movie(movie.id)
-            movie.set_credits(tmdb.get_credits(movie.id))
+            if notification.need_replace(movie.CREDITS, movie):
+                movie.set_credits(tmdb.get_credits(movie.id))
             logger.info(f"New providers for {movie.title} ({movie.year}) : {services}")
             notification.send(movie=movie, services=services)
             time.sleep(0.1)  # Avoid rate limit. wait 100ms between each request

@@ -28,12 +28,31 @@ class Notifiers:
         body = self.create_message(movie, services)
         self.notifier.send(movie, body)
 
+    def get_message(self, movie: Movie, services: str) -> str:
+        return (
+            self.notification_body or
+            f"{movie.title} ({movie.year}) is available on {services} !\n {movie.url}"
+            )
+
     def create_message(self, movie: Movie, services: str) -> str:
-        message = (
-            self.notification_body
-            or f"{movie.title} ({movie.year}) is available on {services} !\n {movie.url}"
+        message = self.get_message(movie, services)
+        if self.notification_body:
+            variables = self.__find_variables(message)
+            message = message.replace("$(services)", services)
+            return self.__replace_variables(message, movie, variables)
+        return message
+
+    def __find_variables(self, message: str) -> list[str]:
+        return re.findall(r"\$\((.*?)\)", message)
+    
+    def need_replace(self, variables: list, movie: Movie) -> bool:
+        message = self.__find_variables(
+            self.get_message(movie, "")
         )
-        variables = re.findall(r"\$\((.*?)\)", message)
+        self.logger.debug(f"Variables in message: {message}")
+        return any(item in variables for item in message)
+    
+    def __replace_variables(self, message: str, movie: Movie, variables: list) -> str:
         for variable in variables:
             if variable in movie.__dict__:
                 self.logger.debug(
@@ -42,6 +61,4 @@ class Notifiers:
                 message = message.replace(
                     f"$({variable})", str(movie.__dict__[variable])
                 )
-            else:
-                message = message.replace("$(services)", str(services))
-        return str(message)
+        return message

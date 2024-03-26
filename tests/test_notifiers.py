@@ -41,15 +41,27 @@ def config_webhook():
         notification_body="**$(title)** ($(year)) is available on $(services) in $(languages)",
     )
 
+@pytest.fixture
+def config_webhook_credits():
+    return Configuration(
+        tmdb_token="a",
+        tmdb_userid="b",
+        webhook_url="https://discord.com/api/webhooks/123/abc",
+        webhook_type="application/json",
+        notification_body="**$(title)** ($(year)) from $(directors) is available on $(services) in $(languages)",
+    )
+
+@pytest.fixture
+def notifier_apprise(config_apprise):
+    return Notifiers(config_apprise)
 
 @pytest.fixture
 def notifier_webhook(config_webhook):
     return Notifiers(config_webhook)
 
-
 @pytest.fixture
-def notifier_apprise(config_apprise):
-    return Notifiers(config_apprise)
+def notifier_webhook_credits(config_webhook_credits):
+    return Notifiers(config_webhook_credits)
 
 
 @patch("tmdb_notifier.notifiers.notifiers.logging")
@@ -103,3 +115,9 @@ def test_create_custom_message(tmdb, notifier_webhook):
         result
         == f"**{movie.title}** ({movie.year}) is available on {services} in {movie.languages}"
     )
+
+def test_need_replace_credits(tmdb, notifier_webhook_credits):
+    mock = json.loads(_load_fixture("movie.json"))
+    movie = tmdb.get_movie(0, mock)
+    print(movie.__dict__)
+    assert notifier_webhook_credits.need_replace(["directors", "actors"], movie) == True

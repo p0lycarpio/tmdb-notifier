@@ -1,6 +1,8 @@
 from tmdb_notifier.utils import readable_list
 
 class Movie:
+    CREDITS = ["actors", "directors", "writers", "producers", "composers"]
+    
     def __init__(self, data: dict) -> None:
         self.id = data.get("id", int())
         self.title = data.get("title", "")
@@ -14,7 +16,7 @@ class Movie:
         self.languages = readable_list([l.get("iso_639_1") for l in data.get("spoken_languages", [])])
         self.original_language = data.get("original_language")
         self.url = f"https://www.themoviedb.org/movie/{self.id}"
-        
+
     def set_credits(self, credits: dict) -> None:
         cast, crew = credits.get("cast", []), credits.get("crew", [])
         self.actors = readable_list([c.get("name") for c in cast])
