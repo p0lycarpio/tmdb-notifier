@@ -39,9 +39,11 @@ if __name__ == "__main__":
     logger.info(f"Search providers for {nb} movies...")
     for idx, movie in enumerate(watchlist.movies, start=1):
         providers = tmdb.get_providers(movie.id)
+        new_providers = db.compare_and_update(f"movie:{movie.id}:providers", providers)[0]
+        logger.debug("New providers (diff) from db: " + str(new_providers))
         diff = search_in(
             reference=list(config.services),
-            search=db.compare_and_update(f"movie:{movie.id}:providers", providers)[0],
+            search=new_providers,
         )
         if diff != set():
             services = readable_list([provider for provider in diff])

@@ -40,17 +40,15 @@ class Database:
         except KeyError:
             stored_obj = set()
 
+        logging.debug(f"stored object: {stored_obj}")
         diff, outdated, changes_nb = find_differences(requested_obj, stored_obj)
 
         if not stored_obj and requested_obj:
             self.db[object_name] = requested_obj
             self.logger.debug(f"Set {object_name} not found in database, entry added")
         elif diff or outdated:
-            # force update of watchlist
-            if object_name == "watchlist":
-                self.db[object_name] = requested_obj
-            else:
-                self.db[object_name] = diff
+            # update database with the new set
+            self.db[object_name] = requested_obj
             self.logger.debug(f"Set {object_name} updated in database")
 
         self.logger.debug(
@@ -66,5 +64,5 @@ class Database:
                 continue
             id = int(key.split(":")[1])
             if id not in self.db["watchlist"]:
+                self.delete(key)
                 self.logger.debug(f"Outdated entry {key} in database removed")
-                del self.db[key]
