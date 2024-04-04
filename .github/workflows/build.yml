@@ -13,7 +13,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 
 jobs:
   docker:
@@ -58,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          provenance: true
+          provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           file: ${{ matrix.dockerfile }}
           platforms: ${{ matrix.arch }}
