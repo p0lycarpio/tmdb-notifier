@@ -41,7 +41,7 @@ class TheMovieDatabase:
     def get_watchlist(self, all_movies=None) -> Watchlist:
         def get_one_page(page: int = 1) -> dict:
             url = f"{self.base_url}/3/account/{self.userid}/watchlist/movies"
-            params = self.query_params
+            params = self.query_params.copy()
             params["page"] = page  # type: ignore
 
             try:
