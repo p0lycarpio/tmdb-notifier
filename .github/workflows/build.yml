@@ -57,6 +57,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           file: ${{ matrix.dockerfile }}
           platforms: ${{ matrix.arch }}
