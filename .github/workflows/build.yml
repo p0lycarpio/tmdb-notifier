@@ -25,13 +25,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - dockerfile: Dockerfile
-            arch: linux/amd64
-          - dockerfile: Dockerfile.aarch64
-            arch: linux/arm64
-          - dockerfile: Dockerfile.armhf
-            arch: linux/arm/v7
+        dockerfiles:
+          - Dockerfile
+          - Dockerfile.aarch64
+          - Dockerfile.armhf
     
     steps:
       - name: Set up QEMU
@@ -58,7 +55,7 @@ jobs:
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          file: ${{ matrix.dockerfile }}
+          file: ${{ matrix.dockerfiles }}
           platforms: | 
             linux/amd64
             linux/arm64
