@@ -56,7 +56,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           file: ${{ matrix.dockerfiles }}
-          platforms: | 
-            linux/amd64
-            linux/arm64
-            linux/arm/v7

@@ -23,6 +23,10 @@ RUN tar -C /root-out/ -Jxpf /tmp/s6-overlay-symlinks-arch.tar.xz
 
 
 FROM python:3.10-alpine3.18
+
+ARG TARGETPLATFORM
+ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/arm64}
+
 WORKDIR /app
 COPY --from=rootfs-stage /root-out/ /
 
