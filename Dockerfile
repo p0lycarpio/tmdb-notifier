@@ -1,7 +1,12 @@
 FROM alpine:3.18 AS rootfs-stage
 
 ARG S6_OVERLAY_VERSION="3.1.6.0"
-ARG S6_OVERLAY_ARCH="x86_64"
+
+ARG TARGETPLATFORM
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then S6_OVERLAY_ARCH=amd64; \
+    elif [ "$TARGETPLATFORM" = "linux/arm/v7" ]; then S6_OVERLAY_ARCH=arm; \
+    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then S6_OVERLAY_ARCH=aarch64; \
+    else S6_OVERLAY_ARCH=amd64; fi
 
 RUN apk add --no-cache \
     bash \
@@ -21,11 +26,7 @@ RUN tar -C /root-out/ -Jxpf /tmp/s6-overlay-symlinks-noarch.tar.xz
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-symlinks-arch.tar.xz /tmp
 RUN tar -C /root-out/ -Jxpf /tmp/s6-overlay-symlinks-arch.tar.xz
 
-
 FROM python:3.10-alpine3.18
-
-ARG TARGETPLATFORM
-ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 
 WORKDIR /app
 COPY --from=rootfs-stage /root-out/ /

@@ -21,15 +21,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    
-    strategy:
-      fail-fast: false
-      matrix:
-        dockerfiles:
-          - Dockerfile
-          - Dockerfile.aarch64
-          - Dockerfile.armhf
-    
+
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -55,4 +47,3 @@ jobs:
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          file: ${{ matrix.dockerfiles }}
