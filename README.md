@@ -4,7 +4,7 @@ Monitor [TMDB](https://www.themoviedb.org/) watchlist and notify you when a movi
 
 > Availability data for movies on streaming services are provided by **JustWatch**. 
 
-## Requierements
+## Requirements
 
 - Docker
 - TMDB account and a [API key](https://www.themoviedb.org/settings/api)
@@ -12,18 +12,12 @@ Monitor [TMDB](https://www.themoviedb.org/) watchlist and notify you when a movi
 
 ### Architectures
 
-The architectures supported by this image are:
-
-| Architecture | Available | Dockerfile |
-| :----: | :----: | ---- |
-| x86-64 | ✅ | Dockerfile |
-| arm64 | ✅ | Dockerfile.aarch64 |
-| armhf | ❌ | |
-
+Architectures supported by this image:
+- linux/amd64 (x86-64)
+- linux/arm/v7 (armhf)
+- linux/arm64
 
 ## Get started
-
-Clone the repo and build the Doker image with `docker build -t tmdb-notifier -f Dockerfile .`
 
 Create an `.env` file or specify environnement variables with `-e` in the following command. See [Environment variables](#environment-variables).
 
@@ -32,7 +26,7 @@ Create an `.env` file or specify environnement variables with `-e` in the follow
 ```bash
 docker run -d \
     --env-file .env \
-    --name tmdb-notifier tmdb-notifier
+    --name tmdb-notifier ghcr.io/p0lycarpio/tmdb-notifier
 ```
 
 ## Environment variables
