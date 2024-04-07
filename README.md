@@ -12,14 +12,10 @@ Monitor [TMDB](https://www.themoviedb.org/) watchlist and notify you when a movi
 
 ### Architectures
 
-The architectures supported by this image are:
-
-| Architecture | Available | Dockerfile |
-| :----: | :----: | ---- |
-| x86-64 | ✅ | Dockerfile |
-| arm64 | ✅ | Dockerfile.aarch64 |
-| armhf | ❌ | |
-
+Architectures supported by this image:
+- linux/amd64 (x86-64)
+- linux/arm/v7 (armhf)
+- linux/arm64
 
 ## Get started
 
@@ -33,7 +29,7 @@ Create an `.env` file or specify environnement variables with `-e` in the follow
 docker run -d \
     -v /path/to/localdata:/data
     --env-file .env \
-    --name tmdb-notifier tmdb-notifier
+    --name tmdb-notifier ghcr.io/p0lycarpio/tmdb-notifier
 ```
 
 ## Configuration
