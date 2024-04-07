@@ -55,21 +55,21 @@ Variables in **bold** are required.
 
 You can customize the notification body with available following fields. Insert **$(variable)** in `NOTIFICATION_BODY` and it will be replaced.
 
-| **Variable** | **Description** | **Example** |
-|---|---|---|
-| id | TMDB movie ID | 915935 |
-| title | Movie title name | Anatomy of a Fall |
-| original_title | Original movie name | Anatomie d'une chute |
-| year | Movie year | 2023 |
-| image | TMDB movie background URL | https://image.tmdb.org/t/p/w500/kszooR7v1TLFM4pzx6IkKq2jDAN.jpg |
-| overview | Synopsis/summary | A woman is suspected of her husband’s murder, and their blind son faces a moral dilemma as the sole witness. |
-| poster | Movie poster URL | https://image.tmdb.org/t/p/w500/kQs6keheMwCxJxrzV83VUwFtHkB.jpg |
-| runtime | Runtime in minutes | 152 |
-| genres |  | Drama & Mystery |
-| languages |  | de, fr & en |
-| original_language |  | fr |
-| url | TMDB movie URL | https://www.themoviedb.org/movie/915935 |
-| services | list of flarate services in your country | |
+| **Variable**      | **Description**                          | **Example**                                                                                                  |
+| ----------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| id                | TMDB movie ID                            | 915935                                                                                                       |
+| title             | Movie title name                         | Anatomy of a Fall                                                                                            |
+| original_title    | Original movie name                      | Anatomie d'une chute                                                                                         |
+| year              | Movie year                               | 2023                                                                                                         |
+| image             | TMDB movie background URL                | https://image.tmdb.org/t/p/w500/kszooR7v1TLFM4pzx6IkKq2jDAN.jpg                                              |
+| overview          | Synopsis/summary                         | A woman is suspected of her husband’s murder, and their blind son faces a moral dilemma as the sole witness. |
+| poster            | Movie poster URL                         | https://image.tmdb.org/t/p/w500/kQs6keheMwCxJxrzV83VUwFtHkB.jpg                                              |
+| runtime           | Runtime in minutes                       | 152                                                                                                          |
+| genres            |                                          | Drama & Mystery                                                                                              |
+| languages         |                                          | de, fr & en                                                                                                  |
+| original_language |                                          | fr                                                                                                           |
+| url               | TMDB movie URL                           | https://www.themoviedb.org/movie/915935                                                                      |
+| services          | list of flarate services in your country |                                                                                                              |
 
 
 Other list variables about credits :
@@ -93,5 +93,5 @@ Run tests with `pytest`.
 - [x] Create filters for streaming services
 - [x] Implement tests
 - [x] Create configuration file and implement class
-- [ ] Build Docker image with actions and push to GHCR
+- [x] Build Docker image with actions and push to GHCR
 - [ ] *TV series support ?*
