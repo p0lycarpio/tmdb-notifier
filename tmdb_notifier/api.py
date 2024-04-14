@@ -1,3 +1,4 @@
+import time
 import logging
 import json
 from requests.exceptions import HTTPError
@@ -64,6 +65,7 @@ class TheMovieDatabase:
                 response = get_one_page(page)
                 all_results["results"].extend(response["results"])
                 all_results["total_results"] = response["total_results"]
+                time.sleep(0.2)
 
             self.logger.info("Watchlist retrieved")
             return all_results

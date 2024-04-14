@@ -52,7 +52,7 @@ if __name__ == "__main__":
                 movie.set_credits(tmdb.get_credits(movie.id))
             logger.info(f"New providers for {movie.title} ({movie.year}) : {services}")
             notification.send(movie=movie, services=services)
-            time.sleep(0.1)  # Avoid rate limit. wait 100ms between each request
+            time.sleep(0.2)  # Avoid rate limit. wait 200ms between each request
             changes += 1
 
     logger.info(
