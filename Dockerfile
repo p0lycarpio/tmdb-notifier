@@ -1,4 +1,4 @@
-FROM alpine:3.18 AS rootfs-stage
+FROM alpine:3.19 AS rootfs-stage
 
 ARG S6_OVERLAY_VERSION="3.1.6.0"
 ARG TARGETPLATFORM
@@ -30,7 +30,7 @@ RUN tar -C /root-out/ -Jxpf /tmp/s6-overlay-symlinks-noarch.tar.xz
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-symlinks-arch.tar.xz /tmp
 RUN tar -C /root-out/ -Jxpf /tmp/s6-overlay-symlinks-arch.tar.xz
 
-FROM python:3.10-alpine3.18
+FROM python:3.11-alpine3.19
 
 WORKDIR /app
 COPY --from=rootfs-stage /root-out/ /
@@ -44,7 +44,6 @@ RUN apk add --no-cache \
     bash \
     ca-certificates \
     coreutils \
-    redis=7.0.15-r0 \
     tzdata && \
     rm -rf /tmp/*
 
@@ -52,7 +51,7 @@ COPY requirements.txt /app/
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # copy app and services
-COPY src/ /app/
+COPY tmdb_notifier/ tmdb_notifier/
 COPY etc/ /etc/
 
 ENTRYPOINT ["/init"]

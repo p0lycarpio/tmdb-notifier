@@ -9,8 +9,8 @@ class HTTPSession(Session):
         self.__retry_strategy = Retry(
             total=4,
             status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=["GET"],
-            backoff_factor=0.2,
+            allowed_methods=["GET", "POST"],
+            backoff_factor=1,
         )
         self.__adapter = HTTPAdapter(max_retries=self.__retry_strategy)
         self.mount("https://", self.__adapter)

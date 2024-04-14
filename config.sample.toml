@@ -1,0 +1,16 @@
+[general]
+loglevel = "INFO"
+language = "en-US"
+timezone = "Europe/Amsterdam"
+cron = "0 20 * * *"
+
+[tmdb]
+tmdb_token = "123"
+tmdb_userid = "abc"
+
+[notifiers]
+apprise_url = "https://"
+webhook_url = "https://discord.com/api/webhooks/abc"
+webhook_type = "application/json"
+notification_body = "New episode of $(title) is available."
+services = "Canal+,Disney Plus,Netflix,OCS,Apple TV Plus,Paramount Plus,Arte"
