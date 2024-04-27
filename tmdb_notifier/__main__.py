@@ -56,7 +56,7 @@ if __name__ == "__main__":
             changes += 1
 
     logger.info(
-        f"{nb} movies processed. {watchlist_diff} watchlist changes, {changes} movies with new providers and {nb-changes} non-updated.\n"
+        f"{nb} movies processed. {watchlist_diff} watchlist changes, {changes} movies with new providers and {nb-changes} non-updated."
     )
     db.cleanup()
     db.close()

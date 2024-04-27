@@ -50,6 +50,7 @@ Variables in **bold** are required.
 - SERVICES: filter for streaming services separated by comma. Example: `Canal+,Disney Plus,Netflix`
 - TZ : timezone. Default : `UTC`
 - LOGLEVEL stdout verbosity. Default to `INFO`
+- PUID/PGID: used for Docker volume permissions. Default : `911`
 
 ### Notification variables
 

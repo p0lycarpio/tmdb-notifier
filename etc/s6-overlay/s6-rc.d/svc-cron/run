@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+# get cron expression from tmdb_notifier cli
+cd /app || exit
+CRON=$(s6-setuidgid abc python3 -m tmdb_notifier cron)
+
+# append cron job to user
+echo "${CRON} cd /app && python3 -m tmdb_notifier" > /data/crontab
+
+# set permissions and import user crontabs
+chown abc:abc /data/crontab
+crontab -u abc /data/crontab
+
+exec /usr/sbin/crond -f -S -l 5

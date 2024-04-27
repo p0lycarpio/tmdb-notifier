@@ -1,6 +1,6 @@
 FROM alpine:3.19 AS rootfs-stage
 
-ARG S6_OVERLAY_VERSION="3.1.6.0"
+ARG S6_OVERLAY_VERSION="3.1.6.2"
 ARG TARGETPLATFORM
 
 RUN apk add --no-cache \
@@ -38,14 +38,23 @@ COPY --from=rootfs-stage /root-out/ /
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0 \
     PYTHONDONTWRITEBYTECODE=1
 
-# install packages
-RUN apk add --no-cache \
-    alpine-release \
-    bash \
-    ca-certificates \
-    coreutils \
-    tzdata && \
-    rm -rf /tmp/*
+RUN \
+    echo "**** install runtime packages ****" && \
+    apk add --no-cache \
+        alpine-release \
+        bash \
+        ca-certificates \
+        coreutils \
+        shadow \
+        tzdata && \
+    echo "**** create abc user and create /data folder ****" && \
+    groupmod -g 1000 users && \
+    useradd -u 911 -U -d /config -s /bin/false abc && \
+    usermod -G users abc && \
+    mkdir -p /data \
+    echo "**** cleanup ****" && \
+    rm -rf \
+        /tmp/*
 
 COPY requirements.txt /app/
 RUN pip3 install --no-cache-dir -r requirements.txt
