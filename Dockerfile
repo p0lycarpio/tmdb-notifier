@@ -1,6 +1,6 @@
 FROM alpine:3.19 AS rootfs-stage
 
-ARG S6_OVERLAY_VERSION="3.1.6.2"
+ARG S6_OVERLAY_VERSION="3.1.6.0" # pin for permissions fix
 ARG TARGETPLATFORM
 
 RUN apk add --no-cache \
@@ -49,7 +49,7 @@ RUN \
         tzdata && \
     echo "**** create abc user and create /data folder ****" && \
     groupmod -g 1000 users && \
-    useradd -u 911 -U -d /config -s /bin/false abc && \
+    useradd -u 911 -U -d /data -s /bin/false abc && \
     usermod -G users abc && \
     mkdir -p /data \
     echo "**** cleanup ****" && \
