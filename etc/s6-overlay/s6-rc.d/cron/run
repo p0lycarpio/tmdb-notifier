@@ -1,8 +1,0 @@
-#!/usr/bin/with-contenv bash
-# shellcheck shell=bash
-
-CRON=$(cd /app && python3 -m tmdb_notifier cron)
-sed -i '$d' /etc/crontabs/root
-echo "${CRON} cd /app && python3 -m tmdb_notifier" >> /etc/crontabs/root
-
-exec /usr/sbin/crond -f -S -l 5
