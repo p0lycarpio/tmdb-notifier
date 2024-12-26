@@ -1,16 +1,23 @@
-from requests import Session
-from requests.adapters import HTTPAdapter
-from urllib3 import Retry
+import logging
 
+from aiohttp_retry import RetryClient, JitterRetry
 
-class HTTPSession(Session):
+class HTTPSession(RetryClient):
     def __init__(self) -> None:
-        super().__init__()
-        self.__retry_strategy = Retry(
-            total=4,
-            status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=["GET", "POST"],
-            backoff_factor=1,
+        logger = logging.getLogger('aiohttp')
+        logger.setLevel(logging.INFO)
+
+        retry_options = JitterRetry(
+            attempts=5,
+            start_timeout=1.2,
+            statuses=set([429]),
         )
-        self.__adapter = HTTPAdapter(max_retries=self.__retry_strategy)
-        self.mount("https://", self.__adapter)
+        super().__init__(
+            raise_for_status=True,
+            retry_options=retry_options,
+            logger=logger,
+        )
+        
+
+    async def close(self):
+        await self._client.close()

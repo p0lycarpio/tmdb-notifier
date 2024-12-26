@@ -1,7 +1,7 @@
-import time
+import asyncio
 import logging
 import json
-from requests.exceptions import HTTPError
+from aiohttp.client_exceptions import ClientResponseError
 
 from dataclasses import dataclass
 
@@ -23,15 +23,14 @@ def read_json_mock(file_name: str) -> dict:
 
 
 class TheMovieDatabase:
-    def __init__(self, token, userid, language) -> None:
-        self.base_url = "https://api.themoviedb.org"
-
+    def __init__(self, token, userid, language, http: HTTPSession) -> None:
+        self.base_url = "https://api.themoviedb.org/"
         self.token = token
         self.userid = userid
         self.country = language[3:5] or language[0:2].upper()
 
         self.logger = logging.getLogger("app:TheMovieDatabase")
-        self.__http = HTTPSession()
+        self.http = http
 
         self.headers = {
             "Authorization": f"Bearer {self.token}",
@@ -39,40 +38,44 @@ class TheMovieDatabase:
         }
         self.query_params = {"language": language}
 
-    def get_watchlist(self, all_movies=None) -> Watchlist:
-        def get_one_page(page: int = 1) -> dict:
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self):
+        """Close the aiohttp session."""
+        await self.http.close()
+
+    async def get_watchlist(self, all_movies=None) -> Watchlist:
+        async def get_one_page(page: int = 1) -> dict:
             url = f"{self.base_url}/3/account/{self.userid}/watchlist/movies"
             params = self.query_params.copy()
             params["page"] = page  # type: ignore
 
             try:
-                response = self.__http.request(
-                    "GET", url, headers=self.headers, params=params
-                )
-                response.raise_for_status()
-            except HTTPError as e:
+                async with self.http.request("GET", url, headers=self.headers, params=params) as response:
+                    return await response.json()
+            except ClientResponseError as e:
                 self.logger.error(
                     f"Error while retrieving watchlist page {page} of {self.userid}: {e}"
                 )
                 raise e
+            else:
+                self.logger.debug(f"Watchlist page {page} of {self.userid} retrieved")
 
-            self.logger.debug(f"Watchlist page {page} of {self.userid} retrieved")
-            return response.json()
-
-        def get_all_watchlist_results(total_pages) -> dict:
+        async def get_all_watchlist_results(total_pages) -> dict:
             all_results = {"results": []}
-            for page in range(1, total_pages + 1):
-                response = get_one_page(page)
+            tasks = [get_one_page(page) for page in range(1, total_pages + 1)]
+            responses = await asyncio.gather(*tasks)
+            for response in responses:
                 all_results["results"].extend(response["results"])
-                all_results["total_results"] = response["total_results"]
-                time.sleep(0.2)
+            all_results["total_results"] = responses[0]["total_results"] if responses else 0 # type: ignore
 
             self.logger.info("Watchlist retrieved")
             return all_results
 
         if not all_movies:
-            fetch = get_one_page()
-            all_movies = get_all_watchlist_results(fetch["total_pages"])
+            fetch = await get_one_page()
+            all_movies = await get_all_watchlist_results(fetch["total_pages"])
 
         ids = set()
         movies = list()
@@ -82,58 +85,48 @@ class TheMovieDatabase:
 
         return Watchlist(ids, movies)
 
-    def get_movie(self, movie_id: int, response=None) -> Movie:
+    async def get_movie(self, movie_id: int, response=None) -> Movie:
         url = f"{self.base_url}/3/movie/{movie_id}"
 
         if not response:
             try:
-                response = self.__http.request(
-                    "GET", url, headers=self.headers, params=self.query_params
-                )
-                response.raise_for_status()
-            except HTTPError as e:
+                async with self.http.request("GET", url, headers=self.headers, params=self.query_params) as response:
+                    response = await response.json()
+                    self.logger.debug(f"Movie {movie_id} {response['title']} retrieved")
+            except ClientResponseError as e:
                 self.logger.error(f"Error while retrieving movie {movie_id}: {e}")
                 raise e
-            response = response.json()
-        self.logger.debug(f"Movie {movie_id} {response['title']} retrieved")
 
         return Movie(response)
 
-    def get_credits(self, movie_id: int, response=None) -> dict:
+    async def get_credits(self, movie_id: int, response=None) -> dict:
         url = f"{self.base_url}/3/movie/{movie_id}/credits"
         if not response:
             try:
-                response = self.__http.request(
-                    "GET", url, headers=self.headers, params=self.query_params
-                )
-                response.raise_for_status()
-            except HTTPError as e:
+                async with self.http.request("GET", url, headers=self.headers, params=self.query_params) as response:
+                    response = await response.json()
+                    self.logger.debug(f"Credits for movie {movie_id} retrieved")
+            except ClientResponseError as e:
                 self.logger.error(
                     f"Error while retrieving credits for movie {movie_id}: {e}"
                 )
                 raise e
-            response = response.json()
-        self.logger.debug(f"Credits for movie {movie_id} retrieved")
 
         return response
 
-    def get_providers(self, movie_id: int, response=None) -> set:
+    async def get_providers(self, movie_id: int, response=None) -> set:
         url = f"{self.base_url}/3/movie/{movie_id}/watch/providers"
 
         if not response:
             try:
-                response = self.__http.request(
-                    "GET", url, headers=self.headers, params=self.query_params
-                )
-                response.raise_for_status()
-            except HTTPError as e:
+                async with self.http.request("GET", url, headers=self.headers, params=self.query_params) as response:
+                    response = await response.json()
+                    self.logger.debug(f"Providers for movie {movie_id} retrieved")
+            except ClientResponseError as e:
                 self.logger.error(
                     f"Error while retrieving providers for movie {movie_id}: {e}"
                 )
                 raise e
-
-            response = response.json()
-        self.logger.debug(f"Providers for movie {movie_id} retrieved")
 
         providers = set()
 
