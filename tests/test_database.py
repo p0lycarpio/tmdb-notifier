@@ -12,15 +12,6 @@ def _load_fixture(filename: str) -> str:
 
 
 @pytest.fixture
-def tmdb():
-    return TheMovieDatabase(
-        token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-        userid="username",
-        language="en-US",
-    )
-
-
-@pytest.fixture
 def db():
     return Database("./tests/__pycache__/tmdb.db")
 
@@ -34,34 +25,37 @@ def test_empty_database(db):
         assert False, "Expected KeyError to be raised"
 
 
-def test_compare_and_update_watchlist(db, tmdb):
+@pytest.mark.asyncio
+async def test_compare_and_update_watchlist(db, tmdb):
     mock = json.loads(_load_fixture("watchlist.json"))
-    watchlist = tmdb.get_watchlist(mock)
+    watchlist = await tmdb.get_watchlist(mock)
     watchlist_diff = db.compare_and_update("watchlist", watchlist.ids)
     assert watchlist_diff[0] == {695, 6977}
     assert watchlist_diff[1] == 2
     assert db.get("watchlist") == watchlist.ids
 
 
-def test_compare_and_update_watchlist_with_no_changes(db, tmdb):
+@pytest.mark.asyncio
+async def test_compare_and_update_watchlist_with_no_changes(db, tmdb):
     mock = json.loads(_load_fixture("watchlist.json"))
-    watchlist = tmdb.get_watchlist(mock)
+    watchlist = await tmdb.get_watchlist(mock)
     watchlist_diff = db.compare_and_update("watchlist", watchlist.ids)
     assert watchlist_diff[0] == set()
     assert watchlist_diff[1] == 0
     assert db.get("watchlist") == watchlist.ids
 
 
-def test_compare_and_update_watchlist_new_id(db, tmdb):
+def test_compare_and_update_watchlist_new_id(db):
     watchlist_diff = db.compare_and_update("watchlist", {123})
     assert watchlist_diff[0] == {123}
     assert watchlist_diff[1] == 3
     assert db.get("watchlist") == {123}
 
 
-def test_compare_and_update_providers(db, tmdb):
+@pytest.mark.asyncio
+async def test_compare_and_update_providers(db, tmdb):
     mock = json.loads(_load_fixture("providers.json"))
-    providers = tmdb.get_providers(0, mock)
+    providers = await tmdb.get_providers(0, mock)
     providers_diff = db.compare_and_update("movie:6977:providers", providers)
     assert providers_diff[1] == 7
     assert db.get("movie:6977:providers") == providers

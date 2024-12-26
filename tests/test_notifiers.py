@@ -5,21 +5,11 @@ import pytest
 
 from unittest.mock import patch
 from tmdb_notifier.notifiers import Notifiers
-from tmdb_notifier.api import TheMovieDatabase
 from tmdb_notifier.config import Configuration
 
 
 def _load_fixture(filename: str) -> str:
     return pathlib.Path(__file__).parent.joinpath("fixtures", filename).read_text()
-
-
-@pytest.fixture
-def tmdb():
-    return TheMovieDatabase(
-        token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-        userid="username",
-        language="en-US",
-    )
 
 
 @pytest.fixture
@@ -52,39 +42,42 @@ def config_webhook_credits():
     )
 
 @pytest.fixture
-def notifier_apprise(config_apprise):
-    return Notifiers(config_apprise)
+def notifier_apprise(config_apprise, http_session):
+    return Notifiers(config_apprise, http_session)
 
 @pytest.fixture
-def notifier_webhook(config_webhook):
-    return Notifiers(config_webhook)
+def notifier_webhook(config_webhook, http_session):
+    return Notifiers(config_webhook, http_session)
 
 @pytest.fixture
-def notifier_webhook_credits(config_webhook_credits):
-    return Notifiers(config_webhook_credits)
+def notifier_webhook_credits(config_webhook_credits, http_session):
+    return Notifiers(config_webhook_credits, http_session)
 
 
+@pytest.mark.asyncio
 @patch("tmdb_notifier.notifiers.notifiers.logging")
-def test_init_with_apprise_url(mock_logging, config_apprise):
-    notifier = Notifiers(config_apprise)
+def test_init_with_apprise_url(mock_logging, config_apprise, http_session):
+    notifier = Notifiers(config_apprise, http_session)
     assert notifier.notifier is not None
     assert notifier.notifier.url == "hassio://user@hostname/accesstoken"
     assert mock_logging.getLogger.called
 
 
+@pytest.mark.asyncio
 @patch("tmdb_notifier.notifiers.notifiers.logging")
-def test_init_with_webhook_url(mock_logging, config_webhook):
-    notifier = Notifiers(config_webhook)
+def test_init_with_webhook_url(mock_logging, config_webhook, http_session):
+    notifier = Notifiers(config_webhook, http_session)
     assert notifier.notifier is not None
     assert notifier.notifier.url == "https://discord.com/api/webhooks/123/abc"
     assert mock_logging.getLogger.called
 
 
+@pytest.mark.asyncio
 @patch("tmdb_notifier.notifiers.notifiers.logging")
-def test_init_with_no_notifier_configured(mock_logging):
+def test_init_with_no_notifier_configured(mock_logging, http_session):
     with patch.dict("os.environ", clear=True):
         try:
-            Notifiers(Configuration(tmdb_token="a", tmdb_userid="b"))
+            Notifiers(Configuration(tmdb_token="a", tmdb_userid="b"), http_session)
         except ValueError as e:
             assert (
                 str(e)
@@ -95,9 +88,10 @@ def test_init_with_no_notifier_configured(mock_logging):
         assert mock_logging.getLogger.called
 
 
-def test_create_simple_message(tmdb, notifier_apprise):
+@pytest.mark.asyncio
+async def test_create_simple_message(tmdb, notifier_apprise):
     mock = json.loads(_load_fixture("movie.json"))
-    movie = tmdb.get_movie(0, mock)
+    movie = await tmdb.get_movie(0, mock)
     services = "Netflix"
     result = notifier_apprise.create_message(movie, services)
     assert (
@@ -106,9 +100,10 @@ def test_create_simple_message(tmdb, notifier_apprise):
     )
 
 
-def test_create_custom_message(tmdb, notifier_webhook):
+@pytest.mark.asyncio
+async def test_create_custom_message(tmdb, notifier_webhook):
     mock = json.loads(_load_fixture("movie.json"))
-    movie = tmdb.get_movie(0, mock)
+    movie = await tmdb.get_movie(0, mock)
     services = "Disney+"
     result = notifier_webhook.create_message(movie, services)
     assert (
@@ -116,8 +111,10 @@ def test_create_custom_message(tmdb, notifier_webhook):
         == f"**{movie.title}** ({movie.year}) is available on {services} in {movie.languages}"
     )
 
-def test_need_replace_credits(tmdb, notifier_webhook_credits):
+
+@pytest.mark.asyncio
+async def test_need_replace_credits(tmdb, notifier_webhook_credits):
     mock = json.loads(_load_fixture("movie.json"))
-    movie = tmdb.get_movie(0, mock)
+    movie = await tmdb.get_movie(0, mock)
     print(movie.__dict__)
     assert notifier_webhook_credits.need_replace(["directors", "actors"], movie) == True
